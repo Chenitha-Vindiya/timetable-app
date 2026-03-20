@@ -2,6 +2,30 @@
 
 // store last version number to display update alerts
 
+// Add to DOM constants
+const darkModeToggle = document.getElementById("dark-mode-toggle");
+
+// Check for saved mode on load
+window.addEventListener("load", () => {
+  if (getCookie("theme") === "dark") {
+    document.body.classList.add("dark-mode");
+    darkModeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+  }
+});
+
+// Toggle Logic
+darkModeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+  
+  if (document.body.classList.contains("dark-mode")) {
+    setCookie("theme", "dark", 90);
+    darkModeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+  } else {
+    setCookie("theme", "light", 90);
+    darkModeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+  }
+});
+
 var thisVersion = "1.2.4"; // this must be updated only on a major change (not patches and bug fixes)
 
 var username;
@@ -27,25 +51,24 @@ let realDay = weekday[currentDay];
 let dayToday = realDay;
 
 window.addEventListener("load", (event) => {
-  if (getCookie("username")) {
-    username = getCookie("username");
+  const savedUser = getCookie("username");
+  if (savedUser) {
+    username = savedUser;
     faculty = getCookie("faculty");
     year = getCookie("year");
     semester = getCookie("semester");
     spec = getCookie("spec");
-    sub = getCookie("sub");
-    randomSeed = getCookie("seed"); // random seed
+    sub = getCookie("sub"); // <--- ADD THIS LINE
+    randomSeed = getCookie("seed");
 
-    // read json file and get data to keys[]
     fetch("./data.json")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => (keys = data))
-      .then(function () {
-        displayUserData();
+      .then((response) => response.json())
+      .then((data) => {
+        keys = data;
+        displayUserData(); // This calls displayTable() internally
         transition("splash-section", "main-section");
-      });
+      })
+      .catch(err => console.error("Session restoration failed:", err));
   } else {
     transition("splash-section", "login-section");
     document.getElementById("username-field").focus();
@@ -61,7 +84,7 @@ let logOutBtn = document.getElementById("logout-btn");
 let username_field = document.getElementById("username-field");
 let prev_btn = document.getElementById("left-nav-icon");
 let next_btn = document.getElementById("right-nav-icon");
-
+let select_main_group = document.getElementById("select-main-group");
 // SEQUENCE //
 
 continueBtn.addEventListener("click", readUsername);
@@ -92,7 +115,7 @@ let select_year = document.getElementById("select-year");
 let select_1 = document.getElementById("select-1");
 let select_2 = document.getElementById("select-2");
 let select_3 = document.getElementById("select-3");
-let select_main_group = document.getElementById("select-main-group");
+
 
 // back buttons
 //back btn in details section

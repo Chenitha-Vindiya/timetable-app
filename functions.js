@@ -38,42 +38,54 @@ function getFacList() {
   select_fac.innerHTML = html_content;
 }
 
-// read details and (save them to cookies) -> at last
+// read details and save them to cookies
 function readDetails() {
   let detailsSection = document.getElementById("details-section");
 
+  // Map current selections to the options array
   options[0] = document.getElementById("select-fac").value;
   options[1] = document.getElementById("select-year").value;
   options[2] = document.getElementById("select-1").value;
   options[3] = document.getElementById("select-2").value;
-  options[4] = document.getElementById("select-3").value;
+  
+  /** * CRITICAL FIX: 
+   * Do not use document.getElementById("select-3").value directly.
+   * Use the 'sub' variable which was already combined (e.g., "07.01") 
+   * inside the select_3 change listener in main.js.
+   */
+  options[4] = sub; 
 
+  // Generate a random seed for the profile picture (DiceBear API)
   randomSeed = Math.floor(Math.random() * 100000) + 1;
   options[5] = randomSeed;
 
+  // Validation check
   if (checkVals() == 1) {
     shake(detailsSection);
     detailsError("Select options for all");
   } else {
-    // save details to cookies
+    // 1. Save all details to cookies for persistence on refresh
     setDetails(options);
+    
+    // 2. Prepare the UI data (Greeting, PFP, etc.)
     displayUserData();
+    
+    // 3. Render the timetable
     displayTable();
-    // transition to next page
+    
+    // 4. Move to the main dashboard
     transition("details-section", "main-section");
   }
 
-  // load values from db and display
-
-  // to check if options are 0
+  // Helper function to check if any dropdown is still on the default "0" or "Select"
   function checkVals() {
-    for (i = 0; i < options.length; i++) {
-      if (options[i] == 0 || options[i] == "Select") {
+    for (let i = 0; i < options.length; i++) {
+      // Check for '0', 'Select', or if sub (options[4]) is undefined/empty
+      if (options[i] == 0 || options[i] == "Select" || !options[i]) {
         return 1;
-      } else {
-        continue;
       }
     }
+    return 0;
   }
 }
 
@@ -102,128 +114,113 @@ function displayUserData() {
 
 /**display table */
 function displayTable() {
+  // 1. SAFETY CHECK: Ensure data and all required selection variables exist before proceeding.
+  // This prevents the "Cannot read properties of undefined" error that triggers your catch block.
+  if (!keys || !keys.fac || !faculty || !year || !semester || !spec || !sub) {
+    console.warn("DisplayTable: Required data or user selections are not yet available.");
+    return; 
+  }
+
   try {
+    // Access the specific timetable for the user's subgroup
     let table = keys.fac[faculty][year][semester][spec][sub].table;
 
-    let num = table[dayToday].length;
+    // Check if there are any lectures scheduled for the current day
+    let num = table[dayToday] ? table[dayToday].length : 0;
     let html_content = "";
 
-    // get now date time
+    // Get current date/time to determine if a class is "ongoing"
     var now = new Date();
-
     var nowDateTime = now.toISOString();
     var nowDate = nowDateTime.split("T")[0];
 
-    if (num) {
+    if (num > 0) {
       document.getElementById("date-display").innerHTML = `${dayToday}`;
-      for (i = 0; i < num; i++) {
+      
+      for (let i = 0; i < num; i++) {
         let cardColorClass = "";
         let linkTag = "";
         let lecHall = "";
 
+        // Handle meeting links if they exist in the JSON
         if (table[dayToday][i].link) {
           let link = table[dayToday][i].link;
-          linkTag =
-            '<a class="link-btn" href="' +
-            link +
-            '" target="_blank"><i class="fa-solid fa-link"></i><span class="link-btn-text">Link</span></a>';
+          linkTag = `
+            <a class="link-btn" href="${link}" target="_blank">
+              <i class="fa-solid fa-link"></i><span class="link-btn-text">Link</span>
+            </a>`;
         }
 
+        // Handle location/lecture hall display
         if (table[dayToday][i].loc) {
           lecHall = `<span class="lec-hall"><i class="fa-solid fa-building"></i>${table[dayToday][i].loc}</span>`;
         }
 
+        // Normalize time strings to ensure they are 5 characters (e.g., "08:30")
         let startTime = table[dayToday][i].start;
         let endTime = table[dayToday][i].end;
 
-        if (startTime.length != 5) {
-          startTime = addLeadingZeros(startTime, 5);
-        }
+        if (startTime.length != 5) startTime = addLeadingZeros(startTime, 5);
+        if (endTime.length != 5) endTime = addLeadingZeros(endTime, 5);
 
-        if (endTime.length != 5) {
-          endTime = addLeadingZeros(endTime, 5);
-        }
-
+        // Calculate start and end times for comparison
         var targetStart = new Date(nowDate + "T" + startTime + ":00");
         var targetEnd = new Date(nowDate + "T" + endTime + ":00");
 
+        // Highlight the card if the class is currently in progress
         if (targetStart <= now && targetEnd > now) {
           cardColorClass = "ongoing";
-        } else if (targetStart > now && targetEnd > now) {
-          // display default color
-          cardColorClass = "";
         }
 
-        html_content +=
-          '<div class="card timecard ' +
-          cardColorClass +
-          '" id="card' +
-          (i + 1) +
-          '">' +
-          '<div class="row">' +
-          '<p class="title">' +
-          table[dayToday][i].mod +
-          " <span id='module-code'>" +
-          table[dayToday][i].code +
-          "</span></p>" +
-          '<p class="type">' +
-          table[dayToday][i].type +
-          "</p>" +
-          "</div>" +
-          '<div class="row">' +
-          '<p class="time">' +
-          table[dayToday][i].start +
-          " - " +
-          table[dayToday][i].end +
-          lecHall +
-          "</p>" +
-          linkTag +
-          "</div>" +
-          "</div>";
+        // Build the HTML card for the lecture
+        html_content += `
+          <div class="card timecard ${cardColorClass}" id="card${i + 1}">
+            <div class="row">
+              <p class="title">${table[dayToday][i].mod} 
+                <span id='module-code'>${table[dayToday][i].code}</span>
+              </p>
+              <p class="type">${table[dayToday][i].type}</p>
+            </div>
+            <div class="row">
+              <p class="time">${table[dayToday][i].start} - ${table[dayToday][i].end} ${lecHall}</p>
+              ${linkTag}
+            </div>
+          </div>`;
       }
     } else {
+      // Handle the "No Lectures" state
       document.getElementById("date-display").innerHTML = `${dayToday}`;
-
-      let displayDay;
-
-      // set display message day
-      if (dayToday == realDay) {
-        displayDay = "today";
-      } else {
-        displayDay = dayToday;
-      }
+      let displayDay = (dayToday == realDay) ? "today" : dayToday;
 
       html_content += `
-       <div class="no-lecs-msg">
-             <p>Nice! No lectures for <span> ${displayDay}</span>! 😃</p>
-             <img
-               id="no-lecs-img"
-               src="./images/no-lecs-svg.svg"
-               alt="playing cat"
-             />
-       </div>`;
+        <div class="no-lecs-msg">
+          <p>Nice! No lectures for <span>${displayDay}</span>! 😃</p>
+          <img id="no-lecs-img" src="./images/no-lecs-svg.svg" alt="playing cat" />
+        </div>`;
     }
 
+    // Update the container with the generated content
     document.getElementById("cards-container").innerHTML = html_content;
+
   } catch (error) {
-    console.error("Error occurred:", error);
-    logOut();
+    // Log the specific error for debugging without forcing a logout
+    console.error("Critical Error in displayTable:", error);
+    // logOut(); // Strictly disabled to maintain persistent login
   }
+
+  // Handle version alerts
   if (thisVersion != getCookie("version")) {
-    let versionData;
     fetch("./version-info.json")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => (versionData = data))
-      .then(function () {
+      .then(response => response.json())
+      .then(versionData => {
         showAlert(
           versionData.title,
           versionData.subtitle,
           versionData.notes,
           versionData.alert_btn
         );
-      });
+      })
+      .catch(err => console.warn("Version check failed:", err));
   }
 }
 
@@ -270,12 +267,13 @@ function setDetails(options) {
   setCookie("seed", options[5], 90);
 }
 
-// set a cookie
+// setCookie
 function setCookie(cname, cvalue, exdays) {
   const d = new Date();
   d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
   let expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  // Ensure ;path=/;SameSite=Lax is at the end
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/;SameSite=Lax";
 }
 
 // delete cookie

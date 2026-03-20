@@ -1,60 +1,95 @@
+/* --- 1. Global Reset & Variables --- */
+:root {
+  --primary: #1f2198;
+  --primary-light: #5c5fdb;
+  --accent: #87cefa;
+  --accent-dark: #6495ed;
+  --bg-soft: #f0f4ff;
+  --white: #ffffff;
+  --shadow-sm: 0 5px 15px rgba(31, 33, 152, 0.05);
+  --shadow-md: 0 10px 25px rgba(31, 33, 152, 0.1);
+  --shadow-lg: 0 20px 40px rgba(31, 33, 152, 0.12);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 * {
-  font-family: "Poppins", sans-serif;
-  color: #1f2198;
+  font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
+  background-color: var(--bg-soft);
   overflow-x: hidden;
+  color: var(--primary);
+  line-height: 1.6;
 }
 
+/* --- 2. Base Components --- */
 .btn {
-  font-size: 1.2rem;
-  padding: 7px 18px 7px 20px;
-  border: 1px solid black;
+  font-size: 1.1rem;
+  padding: 10px 24px;
+  border: none;
   border-radius: 150px;
-  color: rgb(38, 38, 38);
-  background-color: white;
   cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.96);
 }
 
 .text {
-  font-size: 1.3em;
-  color: #1f2198;
+  font-size: 1.1rem;
+  color: var(--primary);
 }
 
-/* splash screen */
+/* --- 3. Splash Screen --- */
 .splash {
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  background-color: #ffffff;
-}
-
-.splash .text {
-  font-size: 1.2rem;
-  color: #1f2198;
+  background-color: var(--white);
 }
 
 .splash .loading-img {
-  width: 200px;
-  margin-bottom: 40px;
+  width: 180px;
+  margin-bottom: 30px;
+  filter: drop-shadow(var(--shadow-md));
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+.splash .text {
+  font-size: 1.1rem;
+  font-weight: 500;
 }
 
 .splash .loading-footer-notice {
   margin-top: 40px;
   font-size: 0.7rem;
   font-style: italic;
+  opacity: 0.7;
 }
 
-/* login section */
-
+/* --- 4. Login Section --- */
 #login-section {
   height: 100vh;
   display: flex;
+  padding: 20px;
   justify-content: center;
   align-items: center;
 }
@@ -62,80 +97,68 @@ body {
 .login .wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  background: var(--white);
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
   text-align: center;
 }
 
 .login .login-logo {
   width: 100px;
   align-self: center;
-  margin-bottom: px;
-}
-
-.login .logo-title {
-  display: none;
-  /* font-family: "Poppins", sans-serif;
-  font-size: 2em; */
-  /* font-weight: 900; */
-  /* letter-spacing: -2px;
-  margin-bottom: 12px; */
-}
-
-.login .subheading {
-  font-size: 1.1rem;
-  margin-left: 0px;
-  margin-top: 6px;
-  width: fit-content;
-  padding: 2px 10px 2px 10px;
-  background-color: #afb3ff61;
-  align-self: center;
-  margin-bottom: 20px;
-}
-
-.notif-area {
-  font-size: 1.3rem;
-  color: orangered;
   margin-bottom: 10px;
 }
 
-.btn.login-btn {
-  margin-top: 12px;
-  background-color: yellow;
+.login .subheading {
+  font-size: 0.9rem;
+  padding: 4px 12px;
+  background-color: #afb3ff30;
+  border-radius: 8px;
+  align-self: center;
+  margin-bottom: 25px;
+  font-weight: 600;
 }
 
-.btn.login-btn:hover {
-  background-color: rgb(244, 244, 0);
+.login input {
+  font-size: 1rem;
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  border-radius: 14px;
+  border: 2px solid #f0f2ff;
+  background-color: #f8faff;
+  text-align: center;
+  transition: var(--transition);
+  width: 100%;
+}
+
+.login input:focus {
+  border-color: var(--primary);
+  background-color: var(--white);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(31, 33, 152, 0.1);
 }
 
 .btn.continue-btn {
-  background-color: lightskyblue;
-  /* font-size: 1.2rem; */
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: var(--white);
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(100, 149, 237, 0.3);
+  width: 100%;
 }
 
 .btn.continue-btn:hover {
-  background-color: rgb(128, 195, 236);
-}
-
-.btn.continue-btn.disabled {
-  background-color: rgb(204, 216, 224);
-  color: rgb(126, 126, 126);
-}
-
-#login-bitmoji-img {
-  width: 220px;
-  align-self: center;
-  margin-bottom: -5px;
-}
-
-.login .icon {
-  margin-left: 10px;
-  font-weight: bold;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(100, 149, 237, 0.4);
 }
 
 .login .separator {
   align-self: center;
   width: 90%;
-  height: 0.5px;
-  background-color: rgb(88, 88, 88);
+  height: 1px;
+  background-color: #e0e4ff;
   display: flex;
   margin: 30px 0;
   align-items: center;
@@ -144,32 +167,17 @@ body {
 
 .login .separator::before {
   content: "or";
-  background-color: white;
-  color: rgb(88, 88, 88);
-  padding: 0 5px;
-  font-size: 1.2rem;
+  background-color: var(--white);
+  color: #6e70cf;
+  padding: 0 10px;
+  font-size: 1rem;
 }
 
-.login .text {
-  font-size: 1.3rem;
-  margin-bottom: 15px;
-}
-
-.login input {
-  font-size: 1.2rem;
-  padding: 7px 18px 7px 20px;
-  margin-bottom: 8px;
-  border-radius: 150px;
-  border: 1px solid black;
-  text-align: center;
-}
-
-/* details section */
-
+/* --- 5. Details Section --- */
 #details-section {
   display: none;
   height: 100vh;
-  /* display: flex; */
+  padding: 20px;
   justify-content: center;
   align-items: center;
 }
@@ -177,51 +185,99 @@ body {
 .details .wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 450px;
+  padding: 35px;
+  background: var(--white);
+  border-radius: 28px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(175, 179, 255, 0.2);
   text-align: center;
 }
 
 .details h2 {
   font-size: 1.6rem;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.details p {
+  font-size: 0.95rem;
+  color: #6e70cf;
+  margin-bottom: 25px;
 }
 
 .details .group {
   display: flex;
-  text-align: left;
   flex-direction: column;
-  justify-content: space-between;
-  margin: 8px 0;
+  text-align: left;
+  margin: 12px 0;
 }
 
 .details label {
-  font-size: 1.3em;
-  margin-bottom: 5px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--primary-light);
+  margin-bottom: 6px;
+  margin-left: 4px;
 }
 
 .details select {
-  font-size: 1.2em;
-  border-radius: 8px;
-  padding: 0 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 14px;
+  padding: 12px 18px;
+  border: 2px solid #f0f2ff;
+  background-color: #f8faff;
+  color: var(--primary);
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231f2198' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 16px;
 }
 
-.details .btn.continue-btn {
-  margin-top: 20px;
+.details select:not(:disabled):hover {
+  background-color: var(--white);
+  border-color: #afb3ff;
+  transform: translateY(-2px);
 }
 
-.details .icon {
-  margin-left: 10px;
+.details select:focus {
+  border-color: var(--primary);
+  background-color: var(--white);
+  box-shadow: 0 0 0 4px rgba(31, 33, 152, 0.15);
+  transform: translateY(-2px);
 }
+
+.details select:disabled {
+  background-color: #f2f2f2;
+  border-color: #e8e8e8;
+  color: #b0b0b0;
+  cursor: not-allowed;
+  background-image: none;
+  opacity: 0.6;
+}
+
 
 .text.back-btn {
-  font-size: 1.3rem;
-  text-decoration: underline;
-  margin-top: 15px;
-  align-self: flex-start;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 25px;
+  align-self: center;
+  color: #6e70cf;
+  text-decoration: none;
   cursor: pointer;
+  transition: color 0.2s ease;
 }
 
-.text.back-btn .icon {
-  margin-right: 5px;
+.text.back-btn:hover {
+  color: var(--primary);
 }
 
 /* MAIN SECTION */
@@ -252,7 +308,6 @@ body {
   padding: 10px 10px;
   display: flex;
   flex-direction: column;
-  text-align: center;
 }
 
 .main .controls {
@@ -284,76 +339,123 @@ body {
   margin-bottom: 15px;
 }
 
-/* greeting card top */
+/* --- Greeting Card Enhancement --- */
 .card.greeting {
-  /* to add gradient overlay over the background image of the greeting card */
-  background-image: linear-gradient(
-      to bottom,
-      #a3d6ef,
-      #7fccf3,
-      #1ca7cea2,
-      #3db6d8af,
-      #3db6d8df,
-      #3db6d8df
+  /* Cleaner gradient with better text legibility */
+  background: linear-gradient(
+      165deg, 
+      rgba(61, 182, 216, 0.95), 
+      rgba(31, 33, 152, 0.85)
     ),
     url("./images/greeting-backg.png");
   background-size: cover;
-  color: #f1f12d;
-  height: 150px;
-  justify-content: space-between;
-}
-
-.navigation {
+  background-position: center;
+  color: var(--white); /* White is cleaner than yellow for modern UI */
+  height: auto;
+  min-height: 160px;
+  padding: 24px;
+  border-radius: 28px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
-  margin-bottom: 25px;
+  border: none;
+  box-shadow: var(--shadow-lg);
 }
 
-.navigation i {
-  font-size: 1.5rem;
-  padding: 8px 10px;
-  border-radius: 50px;
-  border: 0.5px solid rgb(217, 217, 217);
-
-  box-shadow: 2px 5px 18px rgba(22, 102, 176, 0.413);
-  cursor: pointer;
+/* Greeting Text Logic */
+.card .greeting-text .text {
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.4;
+  opacity: 0.95;
+  color: white; /* Overriding global primary color */
 }
 
-.navigation i:hover {
-  background-color: #1f2198;
-  transition: 0.3s ease-in-out;
+.card .greeting-text #greeting-username {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+/* Perfected Time Display */
+#greeting-time-row {
+  display: flex;
+  align-items: baseline; /* Better alignment for AM/PM if added later */
+  margin-bottom: -5px;
+}
+
+#greeting-time {
+  font-size: 3.2rem; /* Slightly larger for emphasis */
+  font-weight: 700;
+  letter-spacing: -1.5px;
   color: white;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-#date-display {
-  font-size: 1.5rem;
-  text-transform: uppercase;
+/* Profile Picture Polish */
+#main-pfp {
+  height: 52px;
+  width: 52px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.4); /* Glassmorphism border */
+  box-shadow: var(--shadow-md);
+  background-color: white;
+  transition: var(--transition);
+  object-fit: cover;
+}
+
+#main-pfp:hover {
+  transform: scale(1.08) rotate(5deg);
+  border-color: white;
+}
+
+/* Icon refinement */
+.card.greeting .icon {
+  font-size: 1.8rem;
+  color: rgba(224, 255, 255, 0.8);
+  margin-right: 10px;
 }
 
 .card .row {
+  align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.card .greeting-text {
+/* Navigation */
+.navigation {
+  background: var(--white);
+  padding: 10px 20px;
+  border-radius: 50px;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 30px;
 }
 
-.card .greeting-text .text {
-  font-size: 1.5rem;
-  line-height: 1.2;
+.navigation i {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: var(--transition);
+  cursor: pointer;
+  color: var(--primary);
 }
 
-.card.greeting .icon {
-  font-size: 2.1rem;
-  color: lightcyan;
-  margin-right: 8px;
+.navigation i:hover {
+  background: var(--primary);
+  color: var(--white);
+}
+
+#date-display {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  text-transform: capitalize;
 }
 
 #main-pfp {
@@ -375,141 +477,235 @@ body {
   margin-bottom: -10px;
 }
 
-/* time cards */
-
-.card .row {
-  align-items: center;
+/* --- Time Card Base --- */
+.timecard {
+  position: relative; /* Essential for the absolute badge placement */
+  padding: 24px; /* Increased padding for better breathing room */
+  border-radius: 24px;
+  background-color: var(--white);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+  transition: var(--transition);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
+.timecard:hover {
+  transform: translateX(5px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Module Title & Code */
 .card .title {
-  text-align: left;
-  font-size: 1.8rem;
-  font-weight: 600;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 2px;
 }
 
 #module-code {
-  font-weight: 100;
-  /* font-style: italic; */
-  color: rgb(77, 77, 77);
-  font-size: 1.5rem;
+  font-weight: 500;
+  color: #afb3ff; /* Soft lavender blue for the code */
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
 }
 
-.timecard {
-  padding-top: 8px;
-
-  background-color: #96def8;
-}
-
-.ongoing {
-  background: #787ff6;
-  color: white;
-  background: linear-gradient(to bottom right, #afb3ff, #9297f6);
-}
-
-.timecard.ongoing > p {
-  color: white;
-}
-
+/* Lecture Type Badge (Absolute Positioned) */
 .card .type {
-  margin-top: -5px;
-  max-width: 40%;
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  background: #f0f4ff;
+  color: var(--primary);
+  border-radius: 50px;
   text-transform: uppercase;
-  background-color: white;
-  border-radius: 150px;
-  padding: 0 12px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-.link-btn {
-  font-size: 1.3rem;
-  text-decoration: none;
-  background-color: white;
-  border-radius: 25px;
-  padding: 4px 8px;
-  text-transform: uppercase;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.link-btn-text {
-  margin-left: 4px;
-  display: none;
-}
-
-.link-btn:hover .link-btn-text {
-  display: inline;
+/* --- Details: Time & Location --- */
+.card .time {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .lec-hall {
-  margin-left: 10px;
-
-  font-size: 16px;
-  background-color: #ffffff79;
-  color: #151515cf;
-  padding: 2px 7px 2px 7px;
-  border-radius: 8px;
-  text-transform: uppercase;
-}
-
-.lec-hall > i {
-  font-size: 15px;
-  margin-right: 6px;
-  color: #151515cf;
-}
-
-@media screen and (max-width: 450px) {
-  .card .type {
-    font-size: 0.8rem;
-  }
-
-  .login .logo-title {
-    font-size: 2.5em;
-  }
-
-  .login input {
-    padding: 7px 18px 7px 0px;
-    width: 16em;
-  }
-}
-
-@media screen and (max-width: 350px) {
-  .card .type {
-    font-size: 0.8rem;
-    padding: 7px 18px 7px 20px;
-  }
-
-  .login .logo-title {
-    font-size: 2.3em;
-  }
-
-  .login input {
-    padding: 7px 18px 7px 0px;
-    width: 13em;
-  }
-}
-
-.card .time {
-  font-size: 1.3rem;
-  color: #1f2198c2;
-}
-
-.card.now {
-  background: linear-gradient(to right, #a38ed2, #f9c1eb);
-}
-
-.no-lecs-msg {
-  margin: 30px 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: #f1f3ff;
+  color: var(--primary);
+  padding: 6px 12px;
+  border-radius: 12px;
+  display: inline-flex;
   align-items: center;
+  gap: 6px;
+}
+
+.lec-hall i {
+  font-size: 0.9rem;
+}
+
+/* --- Ongoing/Now State (Dark Mode Friendly) --- */
+.timecard.ongoing {
+  background: linear-gradient(135deg, #787ff6, #4b52ff);
+  border-left: 6px solid #f1f12d;
+}
+
+.timecard.ongoing .title, 
+.timecard.ongoing #module-code, 
+.timecard.ongoing .time,
+.timecard.ongoing .lec-hall {
+  color: white !important;
+}
+
+.timecard.ongoing .type {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.timecard.ongoing .lec-hall {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* --- Mobile Fixes --- */
+@media screen and (max-width: 480px) {
+  .timecard { padding: 20px; }
+  .card .title { font-size: 1.4rem; }
+  .card .type { top: 20px; right: 20px; font-size: 0.7rem; }
+  #module-code { font-size: 0.9rem; }
+  .card .time { font-size: 1.1rem; }
+}
+
+/* Module Title & Code */
+.card .title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column; /* Stack code under title for better mobile space */
+  gap: 2px;
+}
+
+#module-code {
+  font-weight: 400;
+  color: var(--primary-light);
+  font-size: 0.9rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Lecture Type Badge */
+.card .type {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  background: #f0f4ff;
+  color: var(--primary);
+  border-radius: 50px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  box-shadow: none; /* Removed heavy shadow for cleanliness */
+}
+
+/* --- Ongoing/Now State (Perfected) --- */
+.timecard.ongoing {
+  background: linear-gradient(135deg, #787ff6, #4b52ff);
+  border-left-color: #f1f12d; /* Yellow indicator for current class */
+  color: white;
+}
+
+.timecard.ongoing .title, 
+.timecard.ongoing #module-code, 
+.timecard.ongoing .time {
+  color: white !important;
+}
+
+.timecard.ongoing .type {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* --- Details: Time & Location --- */
+.card .time {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-light);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.lec-hall {
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: #f1f3ff;
+  color: var(--primary);
+  padding: 5px 12px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.timecard.ongoing .lec-hall {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+/* Link Button */
+.link-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--white);
+  color: var(--primary);
+  border-radius: 12px;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.link-btn:hover {
+  background-color: var(--primary);
+  color: var(--white);
+  transform: translateY(-3px);
+}
+
+/* No Lectures Message */
+.no-lecs-msg {
+  padding: 40px 20px;
+  text-align: center;
 }
 
 .no-lecs-msg p {
-  font-size: 1.2rem;
-  margin-bottom: 30px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 25px;
 }
 
 #no-lecs-img {
-  width: 100%;
+  max-width: 280px;
+  opacity: 0.9;
 }
 
+/* --- Mobile Fixes --- */
+@media screen and (max-width: 480px) {
+  .card .title { font-size: 1.2rem; }
+  .timecard { padding: 16px; }
+  .lec-hall { margin-left: 0; margin-top: 5px; width: fit-content; }
+}
 /* footer */
 .footer-credits {
   display: flex;
@@ -657,4 +853,133 @@ body {
   line-height: 1.4;
   font-size: 1rem;
   /* padding-right: 25px; */
+}
+
+/* --- 10. Dark Mode & Toggle Styles --- */
+
+/* Manual Toggle Button (Placed in .controls) */
+.mode-toggle {
+  width: 42px;
+  height: 42px;
+  background: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  font-size: 1.1rem;
+  color: var(--primary);
+  border: 1px solid rgba(175, 179, 255, 0.2);
+}
+
+.mode-toggle:hover {
+  transform: scale(1.1) rotate(15deg);
+  background: var(--primary);
+  color: rgb(255, 242, 0);
+}
+
+/* Dark Mode Variables Overlay */
+body.dark-mode {
+  --bg-soft: #0a0b1e;   /* Deep Midnight Blue */
+  --white: #16172d;     /* Dark Surface Color */
+  --primary: #e0e4ff;    /* Soft Lavender White */
+  --primary-light: #afb3ff;
+  --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Base Body & Sections */
+body.dark-mode, 
+body.dark-mode #login-section, 
+body.dark-mode #details-section,
+body.dark-mode .splash {
+  background-color: var(--bg-soft);
+  color: var(--primary);
+}
+
+/* Wrappers & Containers */
+body.dark-mode .login .wrapper, 
+body.dark-mode .details .wrapper,
+body.dark-mode .navigation,
+body.dark-mode .footer-link,
+body.dark-mode .alert-box,
+body.dark-mode .notice {
+  background-color: var(--white);
+  color: var(--primary);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Inputs & Selection Menus */
+body.dark-mode input, 
+body.dark-mode select {
+  background-color: #1f213a;
+  border-color: #2d304e;
+  color: var(--primary);
+}
+
+body.dark-mode select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23afb3ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* Navigation Icons */
+body.dark-mode .navigation i {
+  background: #2d304e;
+  color: var(--primary);
+  border-color: #3d4066;
+}
+
+/* Timecards in Dark Mode */
+body.dark-mode .timecard {
+  background-color: #1c1d36;
+  border-left-color: var(--primary-light);
+  box-shadow: var(--shadow-sm);
+}
+
+body.dark-mode .timecard .type {
+  background: #2d304e;
+  color: var(--primary-light);
+}
+
+body.dark-mode .timecard #module-code {
+  color: var(--primary-light);
+  opacity: 0.6;
+}
+
+body.dark-mode .lec-hall {
+  background: rgba(175, 179, 255, 0.1);
+  color: var(--primary-light);
+}
+
+/* Ongoing Class (Stays Vibrant) */
+body.dark-mode .timecard.ongoing {
+  background: linear-gradient(135deg, #4b52ff, #3137bd);
+  border-left-color: #f1f12d;
+}
+
+/* Separators & Footer */
+body.dark-mode .login .separator {
+  background-color: #2d304e;
+}
+
+body.dark-mode .login .separator::before {
+  background-color: var(--white);
+  color: var(--primary-light);
+}
+
+body.dark-mode #logout-btn {
+  color: #ff6b6b; /* Brighter red for visibility */
+}
+
+/* Scrollbar styling for Dark Mode */
+body.dark-mode::-webkit-scrollbar {
+  width: 8px;
+  background-color: var(--bg-soft);
+}
+
+body.dark-mode::-webkit-scrollbar-thumb {
+  background-color: #2d304e;
+  border-radius: 10px;
 }
