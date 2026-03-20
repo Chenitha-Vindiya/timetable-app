@@ -92,6 +92,7 @@ let select_year = document.getElementById("select-year");
 let select_1 = document.getElementById("select-1");
 let select_2 = document.getElementById("select-2");
 let select_3 = document.getElementById("select-3");
+let select_main_group = document.getElementById("select-main-group");
 
 // back buttons
 //back btn in details section
@@ -212,40 +213,48 @@ select_1.addEventListener("change", function () {
   }
 });
 
-// specialization selection
+// 1. Modify the Specialization (select_2) listener to populate Main Groups
 select_2.addEventListener("change", function () {
-  // let faculty = select_fac.value;
   let selected = select_2.value;
-  spec = selected; // assign to global
+  spec = selected;
 
-  // if selected 'select'
   if (selected == "0") {
+    select_main_group.disabled = true;
     select_3.disabled = true;
-    select_3.value = "0";
   } else {
-    let resultArr = Object.keys(keys.fac[faculty][year][semester][spec]);
-    if (resultArr == "") {
-      select_3.disabled = true;
-      select_3.value = "0";
-    } else {
-      let html_content = '<option value="0">Select</option>';
-      resultArr.forEach((element) => {
-        html_content +=
-          '<option value="' + element + '">' + element + "</option>";
-      });
-      select_3.innerHTML = html_content;
-      select_3.disabled = false;
-    }
+    // Get all keys like "07.01", "07.02", "08.01"
+    let allGroups = Object.keys(keys.fac[faculty][year][semester][spec]);
+    
+    // Extract unique main groups (e.g., ["07", "08", "09"])
+    let mainGroups = [...new Set(allGroups.map(g => g.split('.')[0]))];
+    
+    let html_content = '<option value="0">Select</option>';
+    mainGroups.forEach((group) => {
+      html_content += `<option value="${group}">${group}</option>`;
+    });
+    
+    select_main_group.innerHTML = html_content;
+    select_main_group.disabled = false;
   }
 });
 
-// group selection
-select_3.addEventListener("change", function () {
-  // let faculty = select_fac.value;
-  let selected = select_3.value;
+// 2. Add listener for Main Group to enable Subgroup selection
+select_main_group.addEventListener("change", function() {
+  if (this.value !== "0") {
+    select_3.disabled = false;
+  } else {
+    select_3.disabled = true;
+  }
+});
 
-  if (selected != "0") {
-    sub = selected; // assign to global
+// 3. Modify the Subgroup (select_3) listener to build the final key
+select_3.addEventListener("change", function () {
+  let mainG = select_main_group.value;
+  let subG = select_3.value;
+
+  if (mainG !== "0" && subG !== "0") {
+    // Combine them to match JSON format "07.01"
+    sub = `${mainG}.${subG}`; 
   }
 });
 
