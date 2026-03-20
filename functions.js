@@ -113,26 +113,19 @@ function displayUserData() {
 }
 
 /**display table */
+/** Optimized displayTable for better readability */
 function displayTable() {
-  // 1. SAFETY CHECK: Ensure data and all required selection variables exist before proceeding.
-  // This prevents the "Cannot read properties of undefined" error that triggers your catch block.
   if (!keys || !keys.fac || !faculty || !year || !semester || !spec || !sub) {
-    console.warn("DisplayTable: Required data or user selections are not yet available.");
     return; 
   }
 
   try {
-    // Access the specific timetable for the user's subgroup
     let table = keys.fac[faculty][year][semester][spec][sub].table;
-
-    // Check if there are any lectures scheduled for the current day
     let num = table[dayToday] ? table[dayToday].length : 0;
     let html_content = "";
 
-    // Get current date/time to determine if a class is "ongoing"
     var now = new Date();
-    var nowDateTime = now.toISOString();
-    var nowDate = nowDateTime.split("T")[0];
+    var nowDate = now.toISOString().split("T")[0];
 
     if (num > 0) {
       document.getElementById("date-display").innerHTML = `${dayToday}`;
@@ -142,88 +135,53 @@ function displayTable() {
         let linkTag = "";
         let lecHall = "";
 
-        // Handle meeting links if they exist in the JSON
         if (table[dayToday][i].link) {
-          let link = table[dayToday][i].link;
-          linkTag = `
-            <a class="link-btn" href="${link}" target="_blank">
-              <i class="fa-solid fa-link"></i><span class="link-btn-text">Link</span>
-            </a>`;
+          linkTag = `<a class="link-btn" href="${table[dayToday][i].link}" target="_blank"><i class="fa-solid fa-link"></i></a>`;
         }
 
-        // Handle location/lecture hall display
         if (table[dayToday][i].loc) {
-          lecHall = `<span class="lec-hall"><i class="fa-solid fa-building"></i>${table[dayToday][i].loc}</span>`;
+          lecHall = `<span class="lec-hall"><i class="fa-solid fa-building"></i> ${table[dayToday][i].loc}</span>`;
         }
 
-        // Normalize time strings to ensure they are 5 characters (e.g., "08:30")
-        let startTime = table[dayToday][i].start;
-        let endTime = table[dayToday][i].end;
+        let startTime = addLeadingZeros(table[dayToday][i].start, 5);
+        let endTime = addLeadingZeros(table[dayToday][i].end, 5);
 
-        if (startTime.length != 5) startTime = addLeadingZeros(startTime, 5);
-        if (endTime.length != 5) endTime = addLeadingZeros(endTime, 5);
-
-        // Calculate start and end times for comparison
         var targetStart = new Date(nowDate + "T" + startTime + ":00");
         var targetEnd = new Date(nowDate + "T" + endTime + ":00");
 
-        // Highlight the card if the class is currently in progress
         if (targetStart <= now && targetEnd > now) {
           cardColorClass = "ongoing";
         }
 
-        // Build the HTML card for the lecture
+        // Updated HTML to match your screenshot layout
         html_content += `
-          <div class="card timecard ${cardColorClass}" id="card${i + 1}">
-            <div class="row">
-              <p class="title">${table[dayToday][i].mod} 
-                <span id='module-code'>${table[dayToday][i].code}</span>
-              </p>
-              <p class="type">${table[dayToday][i].type}</p>
+          <div class="timecard ${cardColorClass}">
+            <div class="card-row top">
+              <div class="subject-info">
+                <span class="mod-name">${table[dayToday][i].mod}</span>
+                <span class="mod-code">${table[dayToday][i].code}</span>
+              </div>
+              <span class="type-badge">${table[dayToday][i].type}</span>
             </div>
-            <div class="row">
-              <p class="time">${table[dayToday][i].start} - ${table[dayToday][i].end} ${lecHall}</p>
+            <div class="card-row bottom">
+              <div class="time-loc">
+                <span class="time-text">${table[dayToday][i].start} - ${table[dayToday][i].end}</span>
+                ${lecHall}
+              </div>
               ${linkTag}
             </div>
           </div>`;
       }
     } else {
-      // Handle the "No Lectures" state
       document.getElementById("date-display").innerHTML = `${dayToday}`;
-      let displayDay = (dayToday == realDay) ? "today" : dayToday;
-
-      html_content += `
-        <div class="no-lecs-msg">
-          <p>Nice! No lectures for <span>${displayDay}</span>! 😃</p>
-          <img id="no-lecs-img" src="./images/no-lecs-svg.svg" alt="playing cat" />
-        </div>`;
+      html_content = `<div class="no-lecs-msg"><p>No lectures for today! 😃</p></div>`;
     }
 
-    // Update the container with the generated content
     document.getElementById("cards-container").innerHTML = html_content;
-
   } catch (error) {
-    // Log the specific error for debugging without forcing a logout
-    console.error("Critical Error in displayTable:", error);
-    // logOut(); // Strictly disabled to maintain persistent login
-  }
-
-  // Handle version alerts
-  if (thisVersion != getCookie("version")) {
-    fetch("./version-info.json")
-      .then(response => response.json())
-      .then(versionData => {
-        showAlert(
-          versionData.title,
-          versionData.subtitle,
-          versionData.notes,
-          versionData.alert_btn
-        );
-      })
-      .catch(err => console.warn("Version check failed:", err));
+    console.error("Error displaying table:", error);
   }
 }
-
 function displayTime() {
   let currentTime = document.getElementById("greeting-time");
   let now = new Date().toLocaleTimeString();

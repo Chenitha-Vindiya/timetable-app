@@ -27,6 +27,10 @@ body {
   line-height: 1.6;
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 /* --- 2. Base Components --- */
 .btn {
   font-size: 1.1rem;
@@ -69,8 +73,17 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.05); opacity: 0.8; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
 }
 
 .splash .text {
@@ -265,19 +278,29 @@ body {
 }
 
 
+/* Base style for the Back Button */
 .text.back-btn {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  /* margin-top: 25px; */
-  align-self: center;
-  color: #6e70cf;
-  text-decoration: none;
+  color: var(--primary-light);
+  background: var(--white);
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(175, 179, 255, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: var(--transition);
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
 }
 
 .text.back-btn:hover {
+  background: var(--bg-soft);
   color: var(--primary);
+  transform: translateX(-3px);
+  border-color: var(--primary-light);
 }
 
 /* MAIN SECTION */
@@ -288,18 +311,33 @@ body {
   justify-content: center;
 }
 
+/* Base style for the Logout Button */
 #logout-btn {
-  text-decoration: underline;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ff6b6b;
+  /* Soft red */
+  background: var(--white);
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(255, 107, 107, 0.2);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  /* Removed the underline */
 }
 
-#logout-btn .icon {
-  margin-left: 5px;
-}
-
-#logout-btn .icon:hover {
-  transition: 0.1s ease-in-out;
-  color: rgb(242, 64, 64);
+#logout-btn:hover {
+  background: #fff5f5;
+  color: #f24040;
+  /* Darker red */
+  border-color: #ff6b6b;
+  transform: translateX(3px);
+  box-shadow: 0 5px 15px rgba(255, 107, 107, 0.15);
 }
 
 .main .wrapper {
@@ -342,15 +380,14 @@ body {
 /* --- Greeting Card Enhancement --- */
 .card.greeting {
   /* Cleaner gradient with better text legibility */
-  background: linear-gradient(
-      165deg, 
-      rgba(61, 182, 216, 0.95), 
-      rgba(31, 33, 152, 0.85)
-    ),
+  background: linear-gradient(165deg,
+      rgba(61, 182, 216, 0.95),
+      rgba(31, 33, 152, 0.85)),
     url("./images/greeting-backg.png");
   background-size: cover;
   background-position: center;
-  color: var(--white); /* White is cleaner than yellow for modern UI */
+  color: var(--white);
+  /* White is cleaner than yellow for modern UI */
   height: auto;
   min-height: 160px;
   padding: 24px;
@@ -368,7 +405,8 @@ body {
   font-weight: 500;
   line-height: 1.4;
   opacity: 0.95;
-  color: white; /* Overriding global primary color */
+  color: white;
+  /* Overriding global primary color */
 }
 
 .card .greeting-text #greeting-username {
@@ -379,12 +417,14 @@ body {
 /* Perfected Time Display */
 #greeting-time-row {
   display: flex;
-  align-items: baseline; /* Better alignment for AM/PM if added later */
+  align-items: baseline;
+  /* Better alignment for AM/PM if added later */
   margin-bottom: -5px;
 }
 
 #greeting-time {
-  font-size: 3.2rem; /* Slightly larger for emphasis */
+  font-size: 3.2rem;
+  /* Slightly larger for emphasis */
   font-weight: 700;
   letter-spacing: -1.5px;
   color: white;
@@ -401,14 +441,16 @@ body {
 /* --- Navigation Refinement --- */
 .navigation {
   background: var(--white);
-  padding: 12px 30px; /* Increased padding for a wider feel */
+  padding: 12px 30px;
+  /* Increased padding for a wider feel */
   border-radius: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: var(--shadow-sm);
   margin: 25px 0;
-  width: 100%; /* Forces it to fill the container */
+  width: 100%;
+  /* Forces it to fill the container */
   border: 1px solid rgba(175, 179, 255, 0.1);
 }
 
@@ -448,112 +490,110 @@ body {
   margin-bottom: -10px;
 }
 
-/* --- Time Card Base --- */
+/* --- Screenshot Match Styles --- */
 .timecard {
-  position: relative; /* Essential for the absolute badge placement */
-  padding: 24px; /* Increased padding for better breathing room */
-  border-radius: 24px;
-  background-color: var(--white);
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 16px;
-  transition: var(--transition);
-  text-align: left;
+  background-color: #98dcf5;
+  /* Light sky blue from image */
+  border-radius: 20px;
+  padding: 18px 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border: none;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  gap: 8px;
+  transition: transform 0.2s ease;
 }
 
-.timecard:hover {
-  transform: translateX(5px);
-  box-shadow: var(--shadow-md);
-}
-
-/* Module Title & Code */
-.card .title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 2px;
-}
-
-#module-code {
-  font-weight: 500;
-  color: #afb3ff; /* Soft lavender blue for the code */
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 12px;
-}
-
-/* Lecture Type Badge (Absolute Positioned) */
-.card .type {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 6px 14px;
-  background: #f0f4ff;
-  color: var(--primary);
-  border-radius: 50px;
-  text-transform: uppercase;
-}
-
-/* --- Details: Time & Location --- */
-.card .time {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--primary-light);
+.card-row {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 10px;
+}
+
+/* Top Row Styling */
+.mod-name {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent-dark);
+  /* Dark blue */
+  margin-right: 8px;
+}
+
+.mod-code {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #555c6e;
+  /* Greyish blue */
+}
+
+.type-badge {
+  background: white;
+  color: #1f2198;
+  padding: 4px 16px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Bottom Row Styling */
+.time-text {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--primary);
+  margin-right: 12px;
 }
 
 .lec-hall {
-  font-size: 0.85rem;
-  font-weight: 700;
-  background: #f1f3ff;
-  color: var(--primary);
-  padding: 6px 12px;
-  border-radius: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.lec-hall i {
+  background: rgba(255, 255, 255, 0.4);
+  padding: 2px 10px;
+  border-radius: 8px;
   font-size: 0.9rem;
+  font-weight: 600;
+  color: #1f2198;
 }
 
-/* --- Ongoing/Now State (Dark Mode Friendly) --- */
+/* Ongoing State Highlight */
 .timecard.ongoing {
-  background: linear-gradient(135deg, #787ff6, #4b52ff);
-  border-left: 6px solid #f1f12d;
+  background: linear-gradient(135deg, #4b52ff, #1f2198);
 }
 
-.timecard.ongoing .title, 
-.timecard.ongoing #module-code, 
-.timecard.ongoing .time,
+.timecard.ongoing .mod-name,
+.timecard.ongoing .mod-code,
+.timecard.ongoing .time-text,
 .timecard.ongoing .lec-hall {
   color: white !important;
 }
 
-.timecard.ongoing .type {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-}
-
-.timecard.ongoing .lec-hall {
-  background: rgba(255, 255, 255, 0.15);
-}
-
 /* --- Mobile Fixes --- */
 @media screen and (max-width: 480px) {
-  .timecard { padding: 20px; }
-  .card .title { font-size: 1.4rem; }
-  .card .type { top: 20px; right: 20px; font-size: 0.7rem; }
-  #module-code { font-size: 0.9rem; }
-  .card .time { font-size: 1.1rem; }
+  .timecard {
+    padding: 20px;
+  }
+
+  /* Footer Grid for Mobile Links */
+  .main .controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 30px;
+  }
+
+  .footer-link {
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
+    font-size: 0.85rem;
+  }
+
+  #main-back-btn,
+  #logout-btn {
+    grid-column: span 1;
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* Module Title & Code */
@@ -561,7 +601,8 @@ body {
   font-size: 1.4rem;
   font-weight: 700;
   display: flex;
-  flex-direction: column; /* Stack code under title for better mobile space */
+  flex-direction: column;
+  /* Stack code under title for better mobile space */
   gap: 2px;
 }
 
@@ -585,18 +626,20 @@ body {
   border-radius: 50px;
   margin-bottom: 12px;
   text-transform: uppercase;
-  box-shadow: none; /* Removed heavy shadow for cleanliness */
+  box-shadow: none;
+  /* Removed heavy shadow for cleanliness */
 }
 
 /* --- Ongoing/Now State (Perfected) --- */
 .timecard.ongoing {
   background: linear-gradient(135deg, #787ff6, #4b52ff);
-  border-left-color: #f1f12d; /* Yellow indicator for current class */
+  border-left-color: #f1f12d;
+  /* Yellow indicator for current class */
   color: white;
 }
 
-.timecard.ongoing .title, 
-.timecard.ongoing #module-code, 
+.timecard.ongoing .title,
+.timecard.ongoing #module-code,
 .timecard.ongoing .time {
   color: white !important;
 }
@@ -610,7 +653,7 @@ body {
 .card .time {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--primary-light);
+  color: var(--accent-dark);
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -654,68 +697,72 @@ body {
   transform: translateY(-3px);
 }
 
-/* No Lectures Message */
 .no-lecs-msg {
-  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  width: 100%;
+  padding: 60px 20px;
 }
 
 .no-lecs-msg p {
-  font-size: 1.1rem;
-  font-weight: 500;
+  font-size: 1.4rem;
+  font-weight: 600;
   margin-bottom: 25px;
 }
 
 #no-lecs-img {
-  max-width: 280px;
-  opacity: 0.9;
+  max-width: 300px;
+  height: auto;
+  filter: drop-shadow(var(--shadow-md));
 }
 
 /* --- Mobile Fixes --- */
 @media screen and (max-width: 480px) {
-  .card .title { font-size: 1.2rem; }
-  .timecard { padding: 16px; }
-  .lec-hall { margin-left: 0; margin-top: 5px; width: fit-content; }
-}
-/* footer */
-.footer-credits {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin: 10px 0;
-  flex-wrap: wrap;
+  .card .title {
+    font-size: 1.2rem;
+  }
+
+  .timecard {
+    padding: 16px;
+  }
+
+  .lec-hall {
+    margin-left: 0;
+    margin-top: 5px;
+    width: fit-content;
+  }
 }
 
 .footer-link {
-  width: auto;
-  font-size: 1rem;
-  margin: 5px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary-light);
   text-decoration: none;
-  border: 0.5px solid rgb(217, 217, 217);
+  background-color: var(--white);
+  padding: 8px 16px;
   border-radius: 50px;
-  background-color: white;
-  padding: 6px 13px;
-  box-shadow: 2px 4px 14px rgba(22, 102, 176, 0.413);
+  border: 1px solid rgba(175, 179, 255, 0.2);
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.footer-link i {
+  font-size: 1rem;
 }
 
 .footer-link:hover {
-  background-color: #1f2198;
-  transition: 0.3s ease-in-out;
-  color: white;
+  background-color: var(--primary);
+  color: var(--white);
+  transform: translateY(-2px);
+  border-color: var(--primary);
 }
 
-.footer-link:hover > i {
-  transition: 0.3s ease-in-out;
-  color: white;
-}
-
-@media screen and (max-width: 350px) {
-  .footer-credits {
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-  }
-}
 
 /* ALERT BOX */
 .alert-wrapper {
@@ -758,7 +805,7 @@ body {
   color: #6e70cf;
 }
 
-.alert-body > img {
+.alert-body>img {
   border-radius: 8px;
   margin-bottom: -16px;
   margin-top: 10px;
@@ -853,9 +900,12 @@ body {
 
 /* Dark Mode Variables Overlay */
 body.dark-mode {
-  --bg-soft: #0a0b1e;   /* Deep Midnight Blue */
-  --white: #16172d;     /* Dark Surface Color */
-  --primary: #e0e4ff;    /* Soft Lavender White */
+  --bg-soft: #0a0b1e;
+  /* Deep Midnight Blue */
+  --white: #16172d;
+  /* Dark Surface Color */
+  --primary: #e0e4ff;
+  /* Soft Lavender White */
   --primary-light: #afb3ff;
   --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.5);
@@ -863,8 +913,8 @@ body.dark-mode {
 }
 
 /* Base Body & Sections */
-body.dark-mode, 
-body.dark-mode #login-section, 
+body.dark-mode,
+body.dark-mode #login-section,
 body.dark-mode #details-section,
 body.dark-mode .splash {
   background-color: var(--bg-soft);
@@ -872,7 +922,7 @@ body.dark-mode .splash {
 }
 
 /* Wrappers & Containers */
-body.dark-mode .login .wrapper, 
+body.dark-mode .login .wrapper,
 body.dark-mode .details .wrapper,
 body.dark-mode .navigation,
 body.dark-mode .footer-link,
@@ -884,7 +934,7 @@ body.dark-mode .notice {
 }
 
 /* Inputs & Selection Menus */
-body.dark-mode input, 
+body.dark-mode input,
 body.dark-mode select {
   background-color: #1f213a;
   border-color: #2d304e;
@@ -907,6 +957,11 @@ body.dark-mode .timecard {
   background-color: #1c1d36;
   border-left-color: var(--primary-light);
   box-shadow: var(--shadow-sm);
+}
+
+/* Dark Mode color fix */
+body.dark-mode .no-lecs-msg p {
+  color: var(--primary-light);
 }
 
 body.dark-mode .timecard .type {
@@ -941,7 +996,8 @@ body.dark-mode .login .separator::before {
 }
 
 body.dark-mode #logout-btn {
-  color: #ff6b6b; /* Brighter red for visibility */
+  color: #ff6b6b;
+  /* Brighter red for visibility */
 }
 
 /* Scrollbar styling for Dark Mode */
@@ -957,146 +1013,195 @@ body.dark-mode::-webkit-scrollbar-thumb {
 
 /* --- 11. Desktop & Tablet Responsiveness --- */
 
-/* --- Optimized Desktop View (Perfect Alignment) --- */
+/* --- Optimized Desktop View (1024px and up) --- */
 @media screen and (min-width: 1024px) {
-    
-    /* 1. Main Container: Standardize the width for all elements */
-    .main .wrapper {
-        max-width: 1100px;
-        padding: 40px 0; /* Horizontal padding 0 ensures children touch the edges */
-        margin: 0 auto;
-        width: 95%; /* Safety margin for smaller desktop screens */
-    }
 
-    /* 2. Navigation Bar: Full width of the 1100px container */
-    .navigation {
-        width: 100%;
-        max-width: 1100px;
-        margin: 0 0 40px 0; /* Remove auto-margins to stick to the wrapper's edges */
-        padding: 15px 35px;
-        display: flex;
-        justify-content: space-between;
-        background: var(--white);
-        border-radius: 16px;
-    }
+  /* When classes ARE present: Show a clean grid */
+  #cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 25px;
+    width: 100%;
+    align-items: start;
+    justify-content: start;
+    min-height: auto;
+  }
 
-    /* Fix for the "white boxes" on navigation icons in dark mode */
-    body.dark-mode .navigation i {
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-    }
+  /* When NO classes are present: Force Flex Centering */
+  #cards-container:has(.no-lecs-msg) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: auto;
+    /* Gives vertical breathing room */
+    grid-template-columns: none;
+  }
 
-    /* 3. Greeting Card: Horizontal layout for desktop */
-    .card.greeting {
-        width: 100%;
-        max-width: 1100px;
-        flex-direction: row;
-        align-items: center;
-        padding: 40px;
-        margin-bottom: 30px;
-        display: flex;
-    }
+  .no-lecs-msg {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
 
-    .greeting-text {
-        text-align: left;
-    }
+  /* 1. Main Wrapper Alignment */
+  .main .wrapper {
+    max-width: 1100px;
+    padding: 40px 0;
+    margin: 0 auto;
+    width: 95%;
+  }
 
-    #greeting-time-row {
-        margin-left: auto; /* Pushes the clock/time to the far right edge */
-        text-align: right;
-    }
+  /* 2. Greeting Card: Absolute Toggle Positioning */
+  .card.greeting {
+    width: 100%;
+    max-width: 1100px;
+    flex-direction: row;
+    /* Horizontal layout for desktop */
+    align-items: center;
+    padding: 40px;
+    margin-bottom: 30px;
+    display: flex;
+    position: relative;
+    /* Required to anchor the absolute toggle */
+  }
 
-    /* 4. Grid Layout for Lectures: Multi-column view */
-    #lec-today-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 25px;
-        width: 100%;
-    }
+  /* Perfect Toggle Placement */
+  .mode-toggle {
+    position: absolute;
+    top: 30px;
+    /* Aligned with internal padding */
+    right: 30px;
+    /* Anchored to the far right */
+    margin: 0;
+    z-index: 10;
+    transition: var(--transition);
+  }
 
-    /* 5. Details Section: Two-column form layout */
-    .details .wrapper {
-        max-width: 850px; /* Slightly narrower than main for a focused form look */
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: 1fr 1fr; 
-        gap: 25px;
-        padding: 50px;
-    }
+  .mode-toggle:hover {
+    transform: scale(1.1) rotate(15deg);
+  }
 
-    /* Elements spanning both columns for the form */
-    .details h2, 
-    .details p, 
-    .details .notif-area,
-    .details .btn.continue-btn, 
-    .details .back-btn {
-        grid-column: span 2;
-    }
+  .greeting-text {
+    text-align: left;
+  }
 
-    .details .btn.continue-btn {
-        width: 320px;
-        margin: 30px auto 0 auto; /* Perfectly centered button */
-    }
+  #greeting-time-row {
+    margin-left: auto;
+    /* Pushes time display to the right */
+    text-align: right;
+  }
 
-    /* 6. Login Wrapper */
-    .login .wrapper {
-        max-width: 480px;
-        margin: 60px auto;
-    }
+  /* 3. Navigation Bar: Full Width */
+  .navigation {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 0 40px 0;
+    padding: 15px 45px;
+    display: flex;
+    justify-content: space-between;
+    background: var(--white);
+    border-radius: 16px;
+  }
+
+  /* 5. Details Section: Two-Column Form */
+  .details .wrapper {
+    max-width: 850px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    padding: 50px;
+    text-align: left;
+  }
+
+  /* Form elements spanning both columns */
+  .details h2,
+  .details p,
+  .details .notif-area,
+  .details .btn.continue-btn,
+  .details .back-btn {
+    grid-column: span 2;
+    text-align: center;
+  }
+
+  .details .btn.continue-btn {
+    width: 320px;
+    margin: 30px auto 0 auto;
+  }
+}
+
+/* --- Tablet Specific Tweaks (768px to 1023px) --- */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .main .wrapper {
+    max-width: 700px;
+  }
+
+  #cards-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
 }
 
 /* --- 12. Tablet Specific Tweaks --- */
 @media screen and (min-width: 768px) and (max-width: 1023px) {
-    .main .wrapper {
-        max-width: 700px;
-    }
+  .main .wrapper {
+    max-width: 700px;
+  }
 
-    #lec-today-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-    }
+  #lec-today-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
 }
 
 /* --- 13. Accessibility & Animation --- */
 @media (prefers-reduced-motion: no-preference) {
-    .timecard:hover {
-        transform: translateY(-5px); /* Lift up instead of right on desktop */
-    }
+  .timecard:hover {
+    transform: translateY(-5px);
+    /* Lift up instead of right on desktop */
+  }
 }
 
 @media screen and (min-width: 768px) {
-    /* 1. Make the Form Wrapper Wider and Balanced */
-    .details .wrapper {
-        max-width: 850px;
-        display: grid;
-        grid-template-columns: 1fr 1fr; /* Two equal columns */
-        gap: 25px;
-        padding: 50px;
-        text-align: left; /* Align text left for a professional desktop feel */
-    }
 
-    /* 2. Elements that should span both columns */
-    .details h2, 
-    .details p, 
-    .details .notif-area,
-    .details .btn.continue-btn, 
-    .details .back-btn {
-        grid-column: span 2;
-        text-align: center; /* Keep titles and buttons centered */
-    }
+  /* 1. Make the Form Wrapper Wider and Balanced */
+  .details .wrapper {
+    max-width: 850px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Two equal columns */
+    gap: 25px;
+    padding: 50px;
+    text-align: left;
+    /* Align text left for a professional desktop feel */
+  }
 
-    /* 3. Navigation Bar: Maximum Width for Desktop */
-    .navigation {
-        max-width: 1100px; /* Much wider as requested */
-        margin: 0 auto 40px auto;
-        padding: 15px 45px; /* More horizontal space inside the bar */
-    }
+  /* 2. Elements that should span both columns */
+  .details h2,
+  .details p,
+  .details .notif-area,
+  .details .btn.continue-btn,
+  .details .back-btn {
+    grid-column: span 2;
+    text-align: center;
+    /* Keep titles and buttons centered */
+  }
 
-    /* 4. Increase visibility of Navigation Text */
-    #date-display {
-        font-size: 1.2rem;
-        letter-spacing: 1.5px;
-    }
+  /* 3. Navigation Bar: Maximum Width for Desktop */
+  .navigation {
+    max-width: 1100px;
+    /* Much wider as requested */
+    margin: 0 auto 40px auto;
+    padding: 15px 45px;
+    /* More horizontal space inside the bar */
+  }
+
+  /* 4. Increase visibility of Navigation Text */
+  #date-display {
+    font-size: 1.2rem;
+    letter-spacing: 1.5px;
+  }
 }
