@@ -4,6 +4,60 @@
       "Y1": {
         "S2": {
           "Common": {
+            "05.01": {
+              "key": "foc_y1_s2_it_05_01",
+                "table": {
+                  "monday": [
+                    { "mod": "TR", "code": "IT1150", "start": "10:30", "end": "11:30", "type": "LEC", "loc": "F1308" },
+                    { "mod": "DSA", "code": "IT1170", "start": "13:30", "end": "15:30", "type": "PRAC", "loc": "G1302" }
+                  ],
+                  "tuesday": [
+                    { "mod": "DSA", "code": "IT1170", "start": "08:30", "end": "10:30", "type": "WORKSHOP", "loc": "A506" },
+                    { "mod": "IS", "code": "IE1011", "start": "10:30", "end": "12:30", "type": "LEC+TUT", "loc": "A506" },
+                    { "mod": "OOP", "code": "SE1020", "start": "14:30", "end": "16:30", "type": "LEC+TUT", "loc": "A304" }
+                  ],
+                  "wednesday": [
+                    { "mod": "DSA", "code": "IT1170", "start": "09:30", "end": "11:30", "type": "LEC", "loc": "Online" }
+                  ],
+                  "thursday": [
+                    { "mod": "DM", "code": "IT1160", "start": "09:30", "end": "11:30", "type": "LEC+TUT", "loc": "F1307" }
+                  ],
+                  "friday": [
+                    { "mod": "OOP", "code": "SE1020", "start": "10:30", "end": "12:30", "type": "PRAC", "loc": "G1302" },
+                    { "mod": "DM", "code": "IT1160", "start": "15:30", "end": "17:30", "type": "PRAC", "loc": "G1301" }
+                  ],
+                  "saturday": [],
+                  "sunday": []
+                }
+              },
+              
+            "05.02": {
+              "key": "foc_y1_s2_it_05_02",
+                "table": {
+                  "monday": [
+                    { "mod": "TR", "code": "IT1150", "start": "10:30", "end": "11:30", "type": "LEC", "loc": "F1308" }
+                  ],
+                  "tuesday": [
+                    { "mod": "DSA", "code": "IT1170", "start": "08:30", "end": "10:30", "type": "WORKSHOP", "loc": "A506" },
+                    { "mod": "IS", "code": "IE1011", "start": "10:30", "end": "12:30", "type": "LEC+TUT", "loc": "A506" },
+                    { "mod": "OOP", "code": "SE1020", "start": "14:30", "end": "16:30", "type": "LEC+TUT", "loc": "A304" }
+                  ],
+                  "wednesday": [
+                    { "mod": "DSA", "code": "IT1170", "start": "09:30", "end": "11:30", "type": "LEC", "loc": "Online" }
+                  ],
+                  "thursday": [
+                    { "mod": "DM", "code": "IT1160", "start": "09:30", "end": "11:30", "type": "LEC+TUT", "loc": "F1307" },
+                    { "mod": "OOP", "code": "SE1020", "start": "15:30", "end": "17:30", "type": "PRAC", "loc": "F1305" }
+                  ],
+                  "friday": [
+                    { "mod": "DSA", "code": "IT1170", "start": "10:30", "end": "12:30", "type": "PRAC", "loc": "F1305" },
+                    { "mod": "DM", "code": "IT1160", "start": "13:30", "end": "15:30", "type": "PRAC", "loc": "F1303+F1304" }
+                  ],
+                  "saturday": [],
+                  "sunday": []
+                }
+            },
+
             "06.01": {
               "key": "foc_y1_s2_it_06_01",
               "table": {
@@ -138,7 +192,7 @@
                 "sunday": []
               }
             },
-            
+
             "12.02": {
               "key": "foc_y1_s2_it_12_02",
               "table": {
