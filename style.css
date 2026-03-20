@@ -573,13 +573,6 @@ body::-webkit-scrollbar {
     padding: 20px;
   }
 
-  /* Footer Grid for Mobile Links */
-  .main .controls {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 30px;
-  }
 
   .footer-link {
     width: 100%;
