@@ -204,7 +204,7 @@ body {
 .details p {
   font-size: 0.95rem;
   color: #6e70cf;
-  margin-bottom: 25px;
+  /* margin-bottom: 25px; */
 }
 
 .details .group {
@@ -268,7 +268,7 @@ body {
 .text.back-btn {
   font-size: 0.9rem;
   font-weight: 600;
-  margin-top: 25px;
+  /* margin-top: 25px; */
   align-self: center;
   color: #6e70cf;
   text-decoration: none;
@@ -391,30 +391,6 @@ body {
   text-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Profile Picture Polish */
-#main-pfp {
-  height: 52px;
-  width: 52px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.4); /* Glassmorphism border */
-  box-shadow: var(--shadow-md);
-  background-color: white;
-  transition: var(--transition);
-  object-fit: cover;
-}
-
-#main-pfp:hover {
-  transform: scale(1.08) rotate(5deg);
-  border-color: white;
-}
-
-/* Icon refinement */
-.card.greeting .icon {
-  font-size: 1.8rem;
-  color: rgba(224, 255, 255, 0.8);
-  margin-right: 10px;
-}
-
 .card .row {
   align-items: center;
   display: flex;
@@ -422,49 +398,44 @@ body {
   justify-content: space-between;
 }
 
-/* Navigation */
+/* --- Navigation Refinement --- */
 .navigation {
   background: var(--white);
-  padding: 10px 20px;
-  border-radius: 50px;
+  padding: 12px 30px; /* Increased padding for a wider feel */
+  border-radius: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: var(--shadow-sm);
-  margin-bottom: 30px;
+  margin: 25px 0;
+  width: 100%; /* Forces it to fill the container */
+  border: 1px solid rgba(175, 179, 255, 0.1);
 }
 
-.navigation i {
-  width: 40px;
-  height: 40px;
+.nav-btn {
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  transition: var(--transition);
+  border-radius: 12px;
   cursor: pointer;
+  transition: var(--transition);
   color: var(--primary);
+  background: transparent;
 }
 
-.navigation i:hover {
-  background: var(--primary);
-  color: var(--white);
+.nav-btn:hover {
+  background: var(--bg-soft);
+  color: var(--primary-light);
 }
 
 #date-display {
   font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: 1px;
-  text-transform: capitalize;
-}
-
-#main-pfp {
-  height: 48px;
-  border-radius: 150px;
-  border: 3px solid white;
-  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.318);
-  background-color: white;
-  cursor: pointer;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--primary);
 }
 
 #greeting-time {
@@ -926,9 +897,9 @@ body.dark-mode select {
 
 /* Navigation Icons */
 body.dark-mode .navigation i {
-  background: #2d304e;
+  background: transparent;
   color: var(--primary);
-  border-color: #3d4066;
+  border: none;
 }
 
 /* Timecards in Dark Mode */
@@ -982,4 +953,150 @@ body.dark-mode::-webkit-scrollbar {
 body.dark-mode::-webkit-scrollbar-thumb {
   background-color: #2d304e;
   border-radius: 10px;
+}
+
+/* --- 11. Desktop & Tablet Responsiveness --- */
+
+/* --- Optimized Desktop View (Perfect Alignment) --- */
+@media screen and (min-width: 1024px) {
+    
+    /* 1. Main Container: Standardize the width for all elements */
+    .main .wrapper {
+        max-width: 1100px;
+        padding: 40px 0; /* Horizontal padding 0 ensures children touch the edges */
+        margin: 0 auto;
+        width: 95%; /* Safety margin for smaller desktop screens */
+    }
+
+    /* 2. Navigation Bar: Full width of the 1100px container */
+    .navigation {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 0 40px 0; /* Remove auto-margins to stick to the wrapper's edges */
+        padding: 15px 35px;
+        display: flex;
+        justify-content: space-between;
+        background: var(--white);
+        border-radius: 16px;
+    }
+
+    /* Fix for the "white boxes" on navigation icons in dark mode */
+    body.dark-mode .navigation i {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* 3. Greeting Card: Horizontal layout for desktop */
+    .card.greeting {
+        width: 100%;
+        max-width: 1100px;
+        flex-direction: row;
+        align-items: center;
+        padding: 40px;
+        margin-bottom: 30px;
+        display: flex;
+    }
+
+    .greeting-text {
+        text-align: left;
+    }
+
+    #greeting-time-row {
+        margin-left: auto; /* Pushes the clock/time to the far right edge */
+        text-align: right;
+    }
+
+    /* 4. Grid Layout for Lectures: Multi-column view */
+    #lec-today-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+        width: 100%;
+    }
+
+    /* 5. Details Section: Two-column form layout */
+    .details .wrapper {
+        max-width: 850px; /* Slightly narrower than main for a focused form look */
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+        gap: 25px;
+        padding: 50px;
+    }
+
+    /* Elements spanning both columns for the form */
+    .details h2, 
+    .details p, 
+    .details .notif-area,
+    .details .btn.continue-btn, 
+    .details .back-btn {
+        grid-column: span 2;
+    }
+
+    .details .btn.continue-btn {
+        width: 320px;
+        margin: 30px auto 0 auto; /* Perfectly centered button */
+    }
+
+    /* 6. Login Wrapper */
+    .login .wrapper {
+        max-width: 480px;
+        margin: 60px auto;
+    }
+}
+
+/* --- 12. Tablet Specific Tweaks --- */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .main .wrapper {
+        max-width: 700px;
+    }
+
+    #lec-today-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+}
+
+/* --- 13. Accessibility & Animation --- */
+@media (prefers-reduced-motion: no-preference) {
+    .timecard:hover {
+        transform: translateY(-5px); /* Lift up instead of right on desktop */
+    }
+}
+
+@media screen and (min-width: 768px) {
+    /* 1. Make the Form Wrapper Wider and Balanced */
+    .details .wrapper {
+        max-width: 850px;
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Two equal columns */
+        gap: 25px;
+        padding: 50px;
+        text-align: left; /* Align text left for a professional desktop feel */
+    }
+
+    /* 2. Elements that should span both columns */
+    .details h2, 
+    .details p, 
+    .details .notif-area,
+    .details .btn.continue-btn, 
+    .details .back-btn {
+        grid-column: span 2;
+        text-align: center; /* Keep titles and buttons centered */
+    }
+
+    /* 3. Navigation Bar: Maximum Width for Desktop */
+    .navigation {
+        max-width: 1100px; /* Much wider as requested */
+        margin: 0 auto 40px auto;
+        padding: 15px 45px; /* More horizontal space inside the bar */
+    }
+
+    /* 4. Increase visibility of Navigation Text */
+    #date-display {
+        font-size: 1.2rem;
+        letter-spacing: 1.5px;
+    }
 }

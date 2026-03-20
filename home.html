@@ -151,33 +151,31 @@
   <section class="main" id="main-section">
     <div class="wrapper">
       <div class="card greeting" id="card-greeting">
-        <!-- greeting row div -->
         <div class="row">
           <div class="greeting-text">
             <p class="text">Hi <span id="greeting-username"></span>,</p>
             <p class="text"><span id="greeting-wish"></span>!</p>
           </div>
           <div id="dark-mode-toggle" class="mode-toggle">
-          <i class="fa-solid fa-moon"></i>
+            <i class="fa-solid fa-moon"></i>
+          </div>
         </div>
-          <div class="pfp"></div>
-        </div>
-        <!-- time and weather div -->
         <div class="row" id="greeting-time-row">
           <p class="text">
             <span id="greeting-time">...</span>
-
-            <!-- <span id="greeting-time-suffix">AM</span> -->
           </p>
         </div>
       </div>
 
       <div class="navigation">
-        <i id="left-nav-icon" class="fa-solid fa-arrow-left"></i>
-        <div id="date-display"></div>
-        <i id="right-nav-icon" class="fa-solid fa-arrow-right"></i>
+        <div class="nav-btn" id="left-nav-icon">
+          <i class="fa-solid fa-chevron-left"></i>
+        </div>
+        <div id="date-display">Today</div>
+        <div class="nav-btn" id="right-nav-icon">
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
       </div>
-
       <!-- <div class="notice-container">
           <div class="notice">
             <div class="notice-head">
