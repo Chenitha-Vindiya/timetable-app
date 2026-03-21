@@ -6,7 +6,7 @@
   "orientation": "any",
   "scope": "/",
   "short_name": "Timetable",
-  "start_url": "/",
+  "start_url": "/timetable-app/home.html",
   "theme_color": "#ffffff",
   "icons": [
     {
