@@ -34,9 +34,10 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/timetable-app/sw.js')
-          .then(reg => console.log('Service Worker registered!', reg))
-          .catch(err => console.log('Service Worker failed:', err));
+        // Using './sw.js' ensures it looks in the current directory
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW Registered!', reg))
+          .catch(err => console.log('SW Failed:', err));
       });
     }
   </script>
@@ -218,7 +219,82 @@
       </div>
     </div>
   </section>
+  <script>
+    // Execute logic once the window has fully loaded
+    window.addEventListener('load', () => {
+      // Check if the browser supports Service Workers
+      if ('serviceWorker' in navigator) {
+        // Wait for the Service Worker to be active and ready to handle notifications
+        navigator.serviceWorker.ready.then(() => {
+          setTimeout(() => {
+            askNotificationPermission();
+          }, 1500); // 1.5s delay to avoid being blocked by browser anti-spam policies
+        });
+      }
+    });
 
+    //Requests permission from the user to send push notifications
+    function askNotificationPermission() {
+      // Exit if the browser doesn't support the Notification API
+      if (!("Notification" in window)) return;
+
+      // If permission hasn't been asked yet ('default')
+      if (Notification.permission === "default") {
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            handleNotificationLogic();
+          }
+        });
+      }
+      // If permission was already granted in a previous session
+      else if (Notification.permission === "granted") {
+        handleNotificationLogic();
+      }
+    }
+
+    //Decides which notification to send based on user history
+    function handleNotificationLogic() {
+      // Check LocalStorage to see if the 'hasVisitedBefore' flag exists
+      const hasVisited = localStorage.getItem('hasVisitedBefore');
+
+      console.log("Has visited before:", hasVisited); // Debugging line
+
+      if (!hasVisited) {
+        welcomeNotification();
+        localStorage.setItem('hasVisitedBefore', 'true');
+      } else {
+        // We use a timestamp in the tag to force the OS to show it every time
+        loginAleart();
+      }
+    }
+
+    //Sends the 'First Time' Welcome Notification.
+    function welcomeNotification() {
+      navigator.serviceWorker.ready.then(registration => {
+        registration.showNotification('SLIIT Timetable', {
+          body: 'Welcome! Notifications are now active.',
+          icon: './images/android-chrome-512x512.png',
+          badge: './images/favicon.ico',
+          vibrate: [200, 100, 200],
+          tag: 'welcome-msg'
+        });
+      });
+    }
+
+    //Sends the 'Returning User' Test Notification
+    function loginAleart() {
+      navigator.serviceWorker.ready.then(registration => {
+        registration.showNotification('SLIIT Timetable', {
+          body: 'Disclaimer: This schedule is provided as-is. We assume no responsibility for its accuracy.',
+          icon: './images/android-chrome-512x512.png',
+          badge: './images/favicon.ico',
+          vibrate: [200, 100, 200],
+          // Changing the tag to include a timestamp forces a NEW notification
+          tag: 'reminder-' + Date.now()
+        });
+      });
+    }
+  </script>
   <style>
     /* Initial values */
     #login-section,

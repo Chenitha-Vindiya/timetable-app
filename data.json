@@ -763,62 +763,6 @@
 
           }
         }
-      },
-
-      "Y2": {
-        "S1": {
-          "Common": {
-            "01.01": {
-              "key": "foc_y2_s1_it_01_01",
-              "table": {
-                "monday": [
-                  { "mod": "PS", "code": "IT2120", "start": "08:30", "end": "10:30", "type": "Practical", "loc": "F305" }
-                ],
-                "tuesday": [
-                  { "mod": "AIML", "code": "IT2011", "start": "08:30", "end": "10:30", "type": "WORKSHOP", "loc": "F605" },
-                  { "mod": "ESD", "code": "IT2100", "start": "19:00", "end": "21:00", "type": "LEC", "loc": "Online" }
-                ],
-                "wednesday": [
-                  { "mod": "AIML", "code": "IT2011", "start": "08:30", "end": "10:30", "type": "LEC", "loc": "F605" }
-                ],
-                "thursday": [
-                  { "mod": "SE", "code": "SE2030", "start": "08:30", "end": "11:30", "type": "LEC+TUT", "loc": "F605" }
-                ],
-                "friday": [
-                  { "mod": "PS", "code": "IT2120", "start": "08:30", "end": "12:30", "type": "LEC+TUT", "loc": "G1102" }
-                ]
-              }
-            }
-          }
-        },
-
-        "S2": {
-          "Common": {
-            "01.01": {
-              "key": "foc_y2_s2_it_01_01",
-              "table": {
-                "monday": [
-                  { "mod": "OSSA", "code": "IT2130", "start": "08:30", "end": "10:30", "type": "LEC", "loc": "Online" }
-                ],
-                "tuesday": [
-                  { "mod": "WMT", "code": "SE2020", "start": "14:30", "end": "17:30", "type": "LEC+TUT", "loc": "F302" }
-                ],
-                "wednesday": [
-                  { "mod": "ProfSkills", "code": "IT2160", "start": "08:30", "end": "10:30", "type": "ASGN", "loc": "F1306" },
-                  { "mod": "WMT", "code": "SE2020", "start": "11:30", "end": "13:30", "type": "Practical", "loc": "B403" }
-                ],
-                "thursday": [
-                  { "mod": "ITP", "code": "IT2150", "start": "08:30", "end": "12:30", "type": "EVAL", "loc": "G605" },
-                  { "mod": "OSSA", "code": "IT2130", "start": "13:30", "end": "15:30", "type": "WORKSHOP", "loc": "F301" }
-                ],
-                "friday": [
-                  { "mod": "ProfSkills", "code": "IT2160", "start": "08:30", "end": "10:30", "type": "LEC", "loc": "F1401" },
-                  { "mod": "OSSA", "code": "IT2130", "start": "12:30", "end": "14:30", "type": "Practical", "loc": "F305" }
-                ]
-              }
-            }
-          }
-        }
       }
       
     }
