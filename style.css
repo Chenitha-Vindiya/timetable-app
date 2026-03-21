@@ -743,6 +743,7 @@ body::-webkit-scrollbar {
   border: 1.5px solid rgba(175, 179, 255, 0.3);
   transition: var(--transition);
   box-shadow: var(--shadow-sm);
+  cursor: pointer;
 }
 
 .footer-link i {
@@ -834,6 +835,128 @@ body::-webkit-scrollbar {
   margin-top: 10px;
 }
 
+/* Modal Background Overlay */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  /* In light mode, uses a lighter semi-transparent black */
+  background: rgba(0, 0, 0, 0.4); 
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  transition: var(--transition);
+}
+
+body.dark-mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* The Modal Card */
+.modal-card {
+  /* Automatically switches: #f8f9ff in Light, #16172d in Dark */
+  background: var(--white); 
+  width: 100%;
+  max-width: 380px;
+  border-radius: 28px;
+  padding: 30px 20px;
+  text-align: center;
+  /* Automatically switches: #1e1e1e in Light, #f1f1ff in Dark */
+  color: var(--primary); 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+}
+
+body.dark-mode .modal-card {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Logo Styling - Fixed colors work in both modes */
+.logo-circle {
+  width: 70px; 
+  height: 70px;
+  border: 3px solid #3b82f6; /* Your blue border */
+  border-radius: 50%;
+  margin: 0 auto 15px;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  overflow: hidden; /* Ensures image doesn't bleed out of the circle */
+  background: white; /* Optional: adds a background if your logo is transparent */
+}
+
+.modal-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This keeps the aspect ratio perfect */
+  display: block;
+}
+
+.yellow-play { color: #eab308; font-size: 1.2rem; }
+.blue-icon { position: absolute; font-size: 2.5rem; opacity: 0.2; color: #3b82f6; }
+
+.app-name { font-family: 'Patua One', cursive; font-size: 1.8rem; margin-bottom: 5px; }
+.version-text { color: #888; font-size: 0.9rem; }
+
+.modal-divider { 
+  border: 0; 
+  border-top: 1px solid rgba(0, 0, 0, 0.1); 
+  margin: 20px 0; 
+}
+
+body.dark-mode .modal-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.release-date { color: #f59e0b; font-weight: 600; font-size: 0.9rem; margin-bottom: 15px; }
+
+.app-summary { 
+  color: #555; /* Dark grey for light mode */
+  line-height: 1.6; 
+  font-size: 0.95rem; 
+}
+
+body.dark-mode .app-summary {
+  color: #ccc; /* Light grey for dark mode */
+}
+
+/* Buttons */
+.feedback-btn {
+  display: inline-block;
+  background: #f1f5f9; /* Light grey-blue for light mode */
+  color: #475569;
+  padding: 12px 25px;
+  border-radius: 14px;
+  text-decoration: none;
+  margin-top: 25px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+body.dark-mode .feedback-btn {
+  background: #1e293b;
+  color: #94a3b8;
+}
+
+.dev-email { font-size: 0.8rem; color: #999; margin-top: 10px; }
+
+.close-text-btn {
+  background: none; border: none; 
+  color: var(--accent); /* Uses your #4b52ff / #30ccff accent */
+  font-size: 1rem; font-weight: 600; margin-top: 25px; cursor: pointer;
+}
+
+/* Pop Animation */
+.animate-pop {
+  animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes modalPop {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
 /* notice section */
 .notice {
   display: flex;
@@ -1197,4 +1320,37 @@ body.dark-mode::-webkit-scrollbar-thumb {
     font-size: 1.2rem;
     letter-spacing: 1.5px;
   }
+}
+
+/* --- About Modal Dark Mode Refinement --- */
+body.dark-mode .modal-card {
+  background-color: var(--white); /* Uses the dark surface color #16172d */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-lg);
+}
+
+body.dark-mode .modal-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .app-summary {
+  color: var(--primary-light); /* Softer lavender white for readability */
+}
+
+body.dark-mode .feedback-btn {
+  background: #1f213a; /* Deep blue-grey for buttons */
+  color: var(--primary-light);
+}
+
+body.dark-mode .feedback-btn:hover {
+  background: #2d304e;
+  color: white;
+}
+
+body.dark-mode .dev-email {
+  color: #6e70cf; /* Muted purple */
+}
+
+body.dark-mode .close-text-btn {
+  color: var(--accent); /* Light blue for the close link */
 }

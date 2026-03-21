@@ -6,19 +6,34 @@ const urlsToCache = [
     './images/android-chrome-512x512.png'
 ];
 
-// Install the service worker and cache files
-self.addEventListener('install', event => {
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(urlsToCache))
-    );
-});
-
 // Fetch files from cache if offline
 self.addEventListener('fetch', event => {
     event.respondWith(
-        caches.match(event.request)
-            .then(response => response || fetch(event.request))
+        fetch(event.request) // Try the network first
+            .then(response => {
+                // If network works, update the cache and return the response
+                return caches.open(CACHE_NAME).then(cache => {
+                    cache.put(event.request, response.clone());
+                    return response;
+                });
+            })
+            .catch(() => {
+                // If network fails (offline), use the cache
+                return caches.match(event.request);
+            })
+    );
+});
+
+self.addEventListener('activate', event => {
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cache => {
+                    // This deletes ALL old caches so the new modal code can load
+                    return caches.delete(cache);
+                })
+            );
+        })
     );
 });
 

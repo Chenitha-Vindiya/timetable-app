@@ -213,9 +213,51 @@
           <i class="fa-solid fa-arrow-left"></i>
         </p>
 
-        <a class="footer-link" href="./about.html">
+        <p class="footer-link" onclick="toggleAboutModal()">
           <i class="fa-solid fa-circle-info"></i> About
-        </a>
+        </p>
+
+        <div id="aboutModal" class="modal-overlay">
+          <div class="modal-card animate-pop">
+            <div class="modal-header">
+              <div class="logo-circle">
+                <img src="./images/android-chrome-512x512.png" alt="App Logo" class="modal-logo-img">
+              </div>
+              <h1 class="app-name">SLIIT Timetable</h1>
+              <p class="version-text">Version 1.2.4</p>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="modal-body">
+              <p class="release-date">
+                <i class="fa-solid fa-calendar-days"></i> Released: March 2026
+              </p>
+              <p class="app-summary">
+                The Timetable App project was created to give our colleagues a
+                smooth experience with their daily lecture timetables.
+                Apart from the typical chart-type tables those were published, this
+                web app shows the user what lectures are available next, what
+                lectures are ongoing now, and more features.
+              </p>
+              <div class="tech-stack" style="font-size: 0.85rem; color: #888; margin-top: 10px;">
+                Built with Vanilla JS
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLScDI8a5NeoFKYcau1ksgFEBuPAe3XP5tQBKvFu3R-kJ1jZqnA/viewform?usp=sf_link"
+                class="feedback-btn" target="_blank">
+                <i class="fa-solid fa-bug"></i> Issues
+              </a>
+              <a href="https://github.com/pawan-live/timetable-app" class="feedback-btn" target="_blank">
+                <i class="fa-brands fa-github"></i> GitHub
+              </a>
+              <p class="dev-email">sample@domain.com</p>
+              <button class="close-text-btn" onclick="toggleAboutModal()">Close</button>
+            </div>
+          </div>
+        </div>
 
         <p class="text" id="logout-btn">
           <i class="fa-solid fa-right-from-bracket"></i>

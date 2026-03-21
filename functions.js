@@ -315,3 +315,34 @@ function closeAlert() {
   let messageContent = document.getElementById("message-content");
   messageContent.innerHTML = "";
 }
+
+function toggleAboutModal() {
+    const modal = document.getElementById("aboutModal");
+    
+    // Check the actual computed style from the browser
+    const currentDisplay = window.getComputedStyle(modal).display;
+
+    if (currentDisplay === "none") {
+        modal.style.display = "flex";
+        document.body.style.overflow = "hidden"; // Stops background scrolling
+    } else {
+        modal.style.display = "none";
+        document.body.style.overflow = "auto"; // Brings scrolling back
+    }
+}
+
+// Close modal if user clicks outside the box
+window.onclick = function(event) {
+  const modal = document.getElementById('aboutModal');
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+// Replace the two separate window click listeners with this single one
+window.addEventListener('click', function(event) {
+  const modal = document.getElementById('aboutModal');
+  if (event.target === modal) {
+    toggleAboutModal(); // Uses your existing logic to reset body overflow
+  }
+});
