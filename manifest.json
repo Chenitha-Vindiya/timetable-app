@@ -5,8 +5,8 @@
   "start_url": "/timetable-app/home.html",
   "scope": "/timetable-app/",
   "display": "standalone",
-  "background_color": "#ff0000",
-  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "theme_color": "#ff0000",
   "orientation": "any",
   "dir": "ltr",
   "icons": [
