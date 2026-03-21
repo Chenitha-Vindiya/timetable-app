@@ -284,7 +284,7 @@
                 ],
                 "tuesday": [
                   { "mod": "OOP", "code": "SE1020", "start": "08:30", "end": "10:30", "type": "LEC+TUT", "loc": "F1307" },
-                  { "mod": "TR", "code": "IT1150", "start": "14:30", "end": "15:30", "type": "LEC", "loc": "F502" }
+                  { "mod": "TR", "code": "IT1150", "start": "13:30", "end": "17:30", "type": "LEC", "loc": "F502" }
                 ],
                 "wednesday": [
                   { "mod": "DSA", "code": "IT1170", "start": "08:30", "end": "10:30", "type": "LEC", "loc": "Online" }
@@ -310,7 +310,7 @@
                 ],
                 "tuesday": [
                   { "mod": "OOP", "code": "SE1020", "start": "08:30", "end": "10:30", "type": "LEC+TUT", "loc": "F1307" },
-                  { "mod": "TR", "code": "IT1150", "start": "14:30", "end": "15:30", "type": "LEC", "loc": "F502" }
+                  { "mod": "TR", "code": "IT1150", "start": "13:30", "end": "17:30", "type": "LEC", "loc": "F502" }
                 ],
                 "wednesday": [
                   { "mod": "DSA", "code": "IT1170", "start": "08:30", "end": "10:30", "type": "LEC", "loc": "Online" }
@@ -602,11 +602,11 @@
               "key": "foc_y1_s2_it_12_01",
               "table": {
                 "monday": [
-                  { "mod": "DM", "code": "IT1160", "start": "09:30", "end": "11:30", "type": "LEC+TUT", "loc": "F502" },
+                  { "mod": "DM", "code": "IT1160", "start": "08:30", "end": "11:30", "type": "LEC+TUT", "loc": "F502" },
                   { "mod": "DM", "code": "IT1160", "start": "13:30", "end": "15:30", "type": "Practical", "loc": "F1305" }
                 ],
                 "tuesday": [
-                  { "mod": "OOP", "code": "SE1020", "start": "09:30", "end": "11:30", "type": "LEC+TUT", "loc": "G1106" },
+                  { "mod": "OOP", "code": "SE1020", "start": "08:30", "end": "11:30", "type": "LEC+TUT", "loc": "G1106" },
                   { "mod": "DSA", "code": "IT1170", "start": "15:30", "end": "17:30", "type": "Practical", "loc": "G1304" }
                 ],
                 "wednesday": [
@@ -617,7 +617,7 @@
                   { "mod": "IS", "code": "IE1011", "start": "15:30", "end": "17:30", "type": "LEC+TUT", "loc": "B501" }
                 ],
                 "friday": [
-                  { "mod": "TR", "code": "IT1150", "start": "09:30", "end": "11:30", "type": "LEC", "loc": "F301" },
+                  { "mod": "TR", "code": "IT1150", "start": "08:30", "end": "12:30", "type": "LEC", "loc": "F301" },
                   { "mod": "OOP", "code": "SE1020", "start": "15:30", "end": "17:30", "type": "Practical", "loc": "G1303" }
                 ],
                 "saturday": [],
@@ -629,11 +629,11 @@
               "key": "foc_y1_s2_it_12_02",
               "table": {
                 "monday": [
-                  { "mod": "DM", "code": "IT1160", "start": "09:30", "end": "11:30", "type": "LEC+TUT", "loc": "F502" },
+                  { "mod": "DM", "code": "IT1160", "start": "08:30", "end": "11:30", "type": "LEC+TUT", "loc": "F502" },
                   { "mod": "DM", "code": "IT1160", "start": "15:30", "end": "17:30", "type": "Practical", "loc": "G1302" }
                 ],
                 "tuesday": [
-                  { "mod": "OOP", "code": "SE1020", "start": "09:30", "end": "11:30", "type": "LEC+TUT", "loc": "G1106" },
+                  { "mod": "OOP", "code": "SE1020", "start": "08:30", "end": "11:30", "type": "LEC+TUT", "loc": "G1106" },
                   { "mod": "DSA", "code": "IT1170", "start": "15:30", "end": "17:30", "type": "Practical", "loc": "G1301" }
                 ],
                 "wednesday": [
@@ -644,7 +644,7 @@
                   { "mod": "IS", "code": "IE1011", "start": "15:30", "end": "17:30", "type": "LEC+TUT", "loc": "B501" }
                 ],
                 "friday": [
-                  { "mod": "TR", "code": "IT1150", "start": "09:30", "end": "11:30", "type": "LEC", "loc": "F301" },
+                  { "mod": "TR", "code": "IT1150", "start": "08:30", "end": "12:30", "type": "LEC", "loc": "F301" },
                   { "mod": "OOP", "code": "SE1020", "start": "13:30", "end": "15:30", "type": "Practical", "loc": "F304" }
                 ],
                 "saturday": [],
