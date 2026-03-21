@@ -5,7 +5,7 @@
   "start_url": "/timetable-app/home.html",
   "scope": "/timetable-app/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#ff0000",
   "theme_color": "#ffffff",
   "orientation": "any",
   "dir": "ltr",
@@ -13,7 +13,7 @@
     {
       "src": "images/favicon.ico",
       "type": "image/x-icon",
-      "sizes": "64x64"
+      "sizes": "48x48"
     },
     {
       "src": "images/apple-touch-icon.png",
@@ -30,17 +30,16 @@
   "screenshots": [
     {
       "src": "images/screenshot-desktop.png",
-      "sizes": "1280x720",
+      "sizes": "1269x869",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Timetable Desktop View"
+      "label": "Desktop Timetable View"
     },
     {
       "src": "images/screenshot-mobile.png",
       "sizes": "750x1334",
       "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Timetable Mobile View"
+      "label": "Mobile Timetable View"
     }
   ]
-} 
+}
