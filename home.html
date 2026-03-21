@@ -8,7 +8,7 @@
   <link rel="icon" type="image/ico" href="./images/favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png" />
   <link rel="apple-touch-icon" sizes="512x512" href="./images/android-chrome-512x512.png" />
-  <link rel="manifest" href="manifest.json"/>
+  <link rel="manifest" href="manifest.json" />
 
   <!-- google fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -29,6 +29,16 @@
     }
     gtag("js", new Date());
     gtag("config", "G-G6MMLWSB6D");
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/timetable-app/sw.js')
+          .then(reg => console.log('Service Worker registered!', reg))
+          .catch(err => console.log('Service Worker failed:', err));
+      });
+    }
   </script>
 
   <!-- Style sheets -->
@@ -197,7 +207,7 @@
         <p class="text back-btn" id="main-back-btn">
           <i class="fa-solid fa-arrow-left"></i>
         </p>
-        
+
         <a class="footer-link" href="./about.html">
           <i class="fa-solid fa-circle-info"></i> About
         </a>

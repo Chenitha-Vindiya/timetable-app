@@ -1,51 +1,46 @@
 {
-  "background_color": "#ffffff",
-  "dir": "ltr",
-  "display": "standalone",
   "name": "SLIIT Timetable",
-  "orientation": "any",
-  "scope": "/",
   "short_name": "Timetable",
+  "id": "/timetable-app/home.html",
   "start_url": "/timetable-app/home.html",
+  "scope": "/timetable-app/",
+  "display": "standalone",
+  "background_color": "#ffffff",
   "theme_color": "#ffffff",
+  "orientation": "any",
+  "dir": "ltr",
   "icons": [
     {
-      "src": "https://chenitha-vindiya.github.io/timetable-app/images/favicon.ico",
+      "src": "images/favicon.ico",
       "type": "image/x-icon",
-      "isSquare": false,
-      "isPng": false,
-      "isWebp": false,
-      "isJpg": false,
-      "width": 0,
-      "is512x512": false,
-      "is256x256": false,
-      "is192x192": false
+      "sizes": "64x64"
     },
     {
-      "src": "https://chenitha-vindiya.github.io/timetable-app/images/apple-touch-icon.png",
+      "src": "images/apple-touch-icon.png",
       "type": "image/png",
-      "sizes": "180x180",
-      "isSquare": true,
-      "isPng": true,
-      "isWebp": false,
-      "isJpg": false,
-      "width": 180,
-      "is512x512": false,
-      "is256x256": false,
-      "is192x192": false
+      "sizes": "180x180"
     },
     {
-      "src": "https://chenitha-vindiya.github.io/timetable-app/images/android-chrome-512x512.png",
+      "src": "images/android-chrome-512x512.png",
       "type": "image/png",
       "sizes": "512x512",
-      "isSquare": true,
-      "isPng": true,
-      "isWebp": false,
-      "isJpg": false,
-      "width": 512,
-      "is512x512": true,
-      "is256x256": false,
-      "is192x192": false
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Timetable Desktop View"
+    },
+    {
+      "src": "images/screenshot-mobile.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Timetable Mobile View"
     }
   ]
-}
+} 
