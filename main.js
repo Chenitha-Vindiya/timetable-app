@@ -5,11 +5,21 @@
 // Add to DOM constants
 const darkModeToggle = document.getElementById("dark-mode-toggle");
 
+// Use querySelectorAll to get BOTH meta tags you added
+const themeMetas = document.querySelectorAll('meta[name="theme-color"]');
+
+// Helper function to update all theme tags at once
+const updateThemeMeta = (color) => {
+  themeMetas.forEach(meta => meta.setAttribute("content", color));
+};
+
 // Check for saved mode on load
 window.addEventListener("load", () => {
   if (getCookie("theme") === "dark") {
     document.body.classList.add("dark-mode");
     darkModeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+    // Update theme color for dark mode
+    updateThemeMeta("#16172d"); 
   }
 });
 
@@ -20,9 +30,11 @@ darkModeToggle.addEventListener("click", () => {
   if (document.body.classList.contains("dark-mode")) {
     setCookie("theme", "dark", 90);
     darkModeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+    updateThemeMeta("#16172d"); // Dark mode color
   } else {
     setCookie("theme", "light", 90);
     darkModeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+    updateThemeMeta("#ff0000"); // Light mode red
   }
 });
 

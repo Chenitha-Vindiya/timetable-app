@@ -3,10 +3,7 @@
   "short_name": "Timetable",
   "id": "./home.html",
   "start_url": "./home.html",
-  "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ff0000",
   "orientation": "any",
   "dir": "ltr",
   "icons": [
