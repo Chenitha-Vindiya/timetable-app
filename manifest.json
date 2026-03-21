@@ -4,7 +4,6 @@
   "id": "./home.html",
   "start_url": "./home.html",
   "display": "standalone",
-  "orientation": "any",
   "dir": "ltr",
   "icons": [
     {
