@@ -268,7 +268,7 @@
         localStorage.setItem('hasVisitedBefore', 'true');
       } else if (lastNotificationDate !== today) {
         // CASE: RETURNING USER + FIRST TIME TODAY
-        loginAleart(); 
+        loginAleart();
         // Update the storage to today's date
         localStorage.setItem('lastNotificationDate', today);
       } else {

@@ -1,9 +1,9 @@
 {
   "name": "SLIIT Timetable",
   "short_name": "Timetable",
-  "id": "/timetable-app/home.html",
-  "start_url": "/timetable-app/home.html",
-  "scope": "/timetable-app/",
+  "id": "./home.html",
+  "start_url": "./home.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ff0000",
