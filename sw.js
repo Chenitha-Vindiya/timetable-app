@@ -38,3 +38,13 @@ self.addEventListener('notificationclick', event => {
     })
   );
 });
+
+self.addEventListener('install', event => {
+  // This forces the new service worker to take over immediately
+  self.skipWaiting(); 
+  
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+  );
+});
