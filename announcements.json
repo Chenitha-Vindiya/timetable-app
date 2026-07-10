@@ -1,3 +1,16 @@
 {
-  "announcements": []
+  "announcements": [
+    {
+      "id": "7ed00123-9d4c-410c-926e-445d64c372b7",
+      "title": "This is test notification",
+      "body": "sample content",
+      "message": "sample content",
+      "faculty": "all",
+      "year": "all",
+      "semester": "all",
+      "spec": "all",
+      "group": "all",
+      "createdAt": "2026-07-10T22:17:57.750Z"
+    }
+  ]
 }
