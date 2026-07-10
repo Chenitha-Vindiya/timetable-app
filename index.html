@@ -170,8 +170,8 @@
             <p class="text">Hi <span id="greeting-username"></span>,</p>
             <p class="text"><span id="greeting-wish"></span>!</p>
           </div>
-          <div id="dark-mode-toggle" class="mode-toggle">
-            <i class="fa-solid fa-moon"></i>
+          <div id="settings-toggle" class="mode-toggle">
+            <i class="fa-solid fa-gear"></i>
           </div>
         </div>
         <div class="row" id="greeting-time-row">
@@ -220,6 +220,33 @@
       </div>
     </div>
   </section>
+  <!-- Settings Modal -->
+  <div id="settingsModal" class="modal-overlay" style="display:none;">
+    <div class="modal-card animate-pop">
+      <div class="modal-header">
+        <h2>Settings</h2>
+      </div>
+      <div class="modal-body">
+        <div class="settings-row">
+          <span>Dark Mode</span>
+          <label class="switch">
+            <input type="checkbox" id="settings-dark-mode">
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div class="settings-row">
+          <span>Notifications</span>
+          <label class="switch">
+            <input type="checkbox" id="settings-notifications">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="feedback-btn" onclick="closeSettingsModal()">Close</button>
+      </div>
+    </div>
+  </div>
   <!-- About Modal (moved out of .controls for proper fixed positioning) -->
   <div id="aboutModal" class="modal-overlay">
     <div class="modal-card animate-pop">

@@ -3,7 +3,9 @@
 // store last version number to display update alerts
 
 // Add to DOM constants
-const darkModeToggle = document.getElementById("dark-mode-toggle");
+const settingsToggle = document.getElementById("settings-toggle");
+const settingsDarkMode = document.getElementById("settings-dark-mode");
+const settingsNotifications = document.getElementById("settings-notifications");
 
 // Use querySelectorAll to get BOTH meta tags you added
 const themeMetas = document.querySelectorAll('meta[name="theme-color"]');
@@ -17,26 +19,65 @@ const updateThemeMeta = (color) => {
 window.addEventListener("load", () => {
   if (getCookie("theme") === "dark") {
     document.body.classList.add("dark-mode");
-    darkModeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-    // Update theme color for dark mode
-    updateThemeMeta("#16172d"); 
+    if (settingsDarkMode) settingsDarkMode.checked = true;
+    updateThemeMeta("#16172d");
+  }
+
+  const notificationEnabled = localStorage.getItem("notifications-enabled") === "true";
+  if (settingsNotifications) settingsNotifications.checked = notificationEnabled;
+  if (notificationEnabled) {
+    askNotificationPermission();
   }
 });
 
-// Toggle Logic
-darkModeToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-  
-  if (document.body.classList.contains("dark-mode")) {
+function openSettingsModal() {
+  const modal = document.getElementById("settingsModal");
+  if (!modal) return;
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closeSettingsModal() {
+  const modal = document.getElementById("settingsModal");
+  if (!modal) return;
+  modal.style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+function applyDarkMode(enabled) {
+  if (enabled) {
+    document.body.classList.add("dark-mode");
     setCookie("theme", "dark", 90);
-    darkModeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
-    updateThemeMeta("#16172d"); // Dark mode color
+    updateThemeMeta("#16172d");
   } else {
+    document.body.classList.remove("dark-mode");
     setCookie("theme", "light", 90);
-    darkModeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
-    updateThemeMeta("#ff0000"); // Light mode red
+    updateThemeMeta("#ff0000");
   }
-});
+}
+
+function updateNotificationSetting(enabled) {
+  localStorage.setItem("notifications-enabled", enabled ? "true" : "false");
+  if (enabled) {
+    askNotificationPermission();
+  }
+}
+
+if (settingsToggle) {
+  settingsToggle.addEventListener("click", openSettingsModal);
+}
+
+if (settingsDarkMode) {
+  settingsDarkMode.addEventListener("change", function () {
+    applyDarkMode(this.checked);
+  });
+}
+
+if (settingsNotifications) {
+  settingsNotifications.addEventListener("change", function () {
+    updateNotificationSetting(this.checked);
+  });
+}
 
 var thisVersion = "1.2.4"; // this must be updated only on a major change (not patches and bug fixes)
 
@@ -259,22 +300,22 @@ select_2.addEventListener("change", function () {
   } else {
     // Get all keys like "07.01", "07.02", "08.01"
     let allGroups = Object.keys(keys.fac[faculty][year][semester][spec]);
-    
+
     // Extract unique main groups (e.g., ["07", "08", "09"])
     let mainGroups = [...new Set(allGroups.map(g => g.split('.')[0]))];
-    
+
     let html_content = '<option value="0">Select</option>';
     mainGroups.forEach((group) => {
       html_content += `<option value="${group}">${group}</option>`;
     });
-    
+
     select_main_group.innerHTML = html_content;
     select_main_group.disabled = false;
   }
 });
 
 // 2. Add listener for Main Group to enable Subgroup selection
-select_main_group.addEventListener("change", function() {
+select_main_group.addEventListener("change", function () {
   if (this.value !== "0") {
     select_3.disabled = false;
   } else {
@@ -289,7 +330,7 @@ select_3.addEventListener("change", function () {
 
   if (mainG !== "0" && subG !== "0") {
     // Combine them to match JSON format "07.01"
-    sub = `${mainG}.${subG}`; 
+    sub = `${mainG}.${subG}`;
   }
 });
 
