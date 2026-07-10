@@ -1,0 +1,450 @@
+:root {
+    --bg: #0c1220;
+    --surface: #111827;
+    --surface-alt: #161f3f;
+    --surface-soft: rgba(255, 255, 255, 0.08);
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent: #4f46e5;
+    --accent-soft: #6366f1;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+    --radius: 24px;
+    --transition: all 0.25s ease;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at top, rgba(99, 102, 241, 0.22), transparent 28%),
+        linear-gradient(180deg, #0b1120 0%, #090d18 100%);
+    color: var(--text);
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+.main-wrapper {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 28px 18px;
+}
+
+.admin-card {
+    width: min(800px, 100%);
+    background: rgba(15, 23, 42, 0.96);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    overflow: hidden;
+}
+
+.admin-hero {
+    padding: 32px 32px 28px;
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.9), rgba(59, 130, 246, 0.55));
+}
+
+.admin-headline {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+}
+
+.admin-subtitle {
+    margin: 16px 0 0;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 540px;
+    line-height: 1.7;
+}
+
+.admin-content {
+    padding: 32px;
+    display: grid;
+    gap: 28px;
+}
+
+.admin-status {
+    display: grid;
+    gap: 14px;
+}
+
+.login-card,
+.dashboard-card {
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 22px;
+    padding: 28px;
+}
+
+.form-group {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.form-group label {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    outline: none;
+    transition: var(--transition);
+}
+
+.form-group input:focus {
+    border-color: rgba(99, 102, 241, 0.7);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: flex-start;
+}
+
+.dashboard-toolbar {
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.announcement-list {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 20px;
+    padding: 22px;
+    display: grid;
+    gap: 16px;
+}
+
+.announcement-modal-card,
+.announcement-list {
+    background: rgba(11, 11, 11, 0.803);
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 20px;
+    padding: 22px;
+    display: grid;
+    gap: 16px;
+}
+
+.announcement-modal-card {
+    position: relative;
+    width: min(580px, 100%);
+    max-width: 100%;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.announcement-modal-card::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.announcement-modal-card textarea,
+.announcement-modal-card input,
+.announcement-modal-card select {
+    width: 100%;
+    min-height: 48px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 14px;
+    color: var(--text);
+}
+
+.announcement-modal-card textarea {
+    min-height: 120px;
+}
+
+.announcement-modal-card select {
+    appearance: none;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    z-index: 10000;
+}
+
+.modal-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.announcement-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 18px;
+    padding: 16px;
+    display: grid;
+    gap: 12px;
+}
+
+.announcement-items {
+    display: grid;
+    gap: 22px;
+}
+
+.announcement-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.announcement-item button {
+    border: none;
+    background: rgba(239, 68, 68, 0.15);
+    color: #fee2e2;
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.announcement-item button:hover {
+    background: rgba(239, 68, 68, 0.25);
+}
+
+.announcement-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 18px;
+    padding: 16px;
+}
+
+.announcement-item p {
+    margin: 0;
+    color: var(--text);
+}
+
+.announcement-item time {
+    display: block;
+    margin-top: 10px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.btn-primary,
+.btn-secondary {
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: var(--transition);
+    padding: 14px 24px;
+    width: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent), #2563eb);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: rgba(255, 0, 0, 0.348);
+    color: var(--text);
+    border: 1px solid rgb(255, 0, 0);
+}
+
+.btn-secondary:hover {
+    background: rgb(153, 41, 41);
+}
+
+.alert-text {
+    color: var(--danger);
+    font-size: 0.95rem;
+    min-height: 22px;
+}
+
+.dashboard-card {
+    display: grid;
+    gap: 24px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.dashboard-metric {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.metric-title {
+    margin: 0 0 10px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.metric-value {
+    margin: 0;
+    font-size: 1.7rem;
+    font-weight: 700;
+}
+
+.config-summary {
+    display: grid;
+    gap: 12px;
+    padding: 18px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px dashed rgba(148, 163, 184, 0.16);
+}
+
+.config-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.config-row strong {
+    color: var(--text);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.footer-note {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+@media (max-width: 720px) {
+    .main-wrapper {
+        padding: 16px;
+    }
+
+    .admin-card {
+        width: 100%;
+        border-radius: 20px;
+    }
+
+    .admin-hero {
+        padding: 24px 20px 20px;
+    }
+
+    .admin-content {
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .login-card,
+    .dashboard-card,
+    .announcement-modal-card,
+    .announcement-list {
+        padding: 20px;
+    }
+
+    .modal-overlay {
+        padding: 16px;
+        align-items: start;
+    }
+
+    .announcement-modal-card {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .dashboard-toolbar {
+        justify-content: stretch;
+    }
+
+    .announcement-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .announcement-modal-card .form-group {
+        margin-bottom: 18px;
+    }
+
+    .modal-close {
+        top: 14px;
+        right: 14px;
+    }
+}
+
+@media (max-width: 640px) {
+    .admin-card {
+        width: 100%;
+    }
+
+    .admin-content {
+        padding: 24px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}

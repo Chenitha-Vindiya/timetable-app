@@ -1,96 +1,108 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Admin — Timetable</title>
-    <link rel="stylesheet" href="style.css" />
-    <style>
-      /* small admin-only helpers */
-      .admin-card { max-width:900px; margin:40px auto; padding:28px; border-radius:18px; background:var(--white); }
-      .admin-hidden { display:none; }
-      .admin-locked { max-width:420px; margin:80px auto; padding:28px; border-radius:18px; background:var(--white); text-align:center; }
-      .input-row { display:flex; gap:8px; align-items:center; justify-content:center; }
-      .admin-actions { display:flex; gap:12px; justify-content:center; margin-top:18px; }
-    </style>
-  </head>
-  <body>
-    <section class="admin-locked" id="locked">
-      <h2>Admin Access</h2>
-      <p>Enter the admin password to continue.</p>
-      <div class="input-row">
-        <input id="admin-pass" type="password" placeholder="Password" style="padding:10px 12px;border-radius:10px;border:1px solid #e6e9ff;" />
-        <button id="admin-unlock" class="btn">Unlock</button>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Console — Timetable</title>
+  <link rel="stylesheet" href="admin.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="main-wrapper">
+    <article class="admin-card">
+      <section class="admin-hero">
+        <div class="status-pill hidden" id="admin-status-badge">
+          <span></span>
+        </div>
+        <h1 class="admin-headline">Admin Login</h1>
+        <p class="admin-subtitle">
+          Secure access for timetable configuration.
+        </p>
+      </section>
+
+      <div class="admin-content">
+        <section class="login-card" id="admin-login-card">
+          <form id="admin-login-form">
+            <div class="form-group">
+              <label for="admin-password-input">Admin Password</label>
+              <input id="admin-password-input" type="password" placeholder="Enter password" autocomplete="off" />
+            </div>
+            <div class="form-actions">
+              <button class="btn-primary" type="submit">Login</button>
+            </div>
+            <p class="alert-text" id="admin-login-error"></p>
+          </form>
+        </section>
+
+        <section class="dashboard-card hidden" id="admin-dashboard">
+          <div class="form-actions dashboard-toolbar">
+            <button class="btn-primary" type="button" id="create-announcement-btn">
+              Create Announcement
+            </button>
+            <button class="btn-secondary" type="button" id="admin-logout-btn">
+              Logout
+            </button>
+          </div>
+
+          <div class="announcement-list hidden" id="announcement-list">
+            <h3 class="card-title">Announcements</h3>
+            <div class="announcement-items"></div>
+          </div>
+        </section>
+
+        <div class="modal-overlay hidden" id="announcement-modal">
+          <div class="modal-card announcement-modal-card">
+            <button class="modal-close" id="announcement-modal-close" type="button">×</button>
+            <h3 class="card-title">Create Announcement</h3>
+            <div class="form-group">
+              <label for="announcement-faculty">Faculty</label>
+              <select id="announcement-faculty"></select>
+            </div>
+            <div class="form-group">
+              <label for="announcement-year">Year</label>
+              <select id="announcement-year"></select>
+            </div>
+            <div class="form-group">
+              <label for="announcement-semester">Semester</label>
+              <select id="announcement-semester"></select>
+            </div>
+            <div class="form-group">
+              <label for="announcement-spec">Specialization</label>
+              <select id="announcement-spec"></select>
+            </div>
+            <div class="form-group">
+              <label for="announcement-group">Group</label>
+              <select id="announcement-group"></select>
+            </div>
+            <div class="form-group">
+              <label for="announcement-title">Announcement Title</label>
+              <input id="announcement-title" type="text" placeholder="Enter announcement title" />
+            </div>
+            <div class="form-group">
+              <label for="announcement-text">Announcement Text</label>
+              <textarea id="announcement-text" rows="4" placeholder="Type announcement here..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="btn-primary" type="button" id="publish-announcement-btn">
+                Send Announcement
+              </button>
+              <button class="btn-secondary" type="button" id="announcement-modal-cancel">
+                Cancel
+              </button>
+            </div>
+            <p class="alert-text" id="announcement-error"></p>
+          </div>
+        </div>
       </div>
-      <p style="font-size:.85rem;color:#666;margin-top:12px;">Tip: Change the password in <strong>admin-config.json</strong> after setup.</p>
-    </section>
+    </article>
+  </div>
 
-    <section id="admin" class="admin-card admin-hidden">
-      <h1>Admin Dashboard</h1>
-      <p class="text">This is a private admin area. Only open if you are the site owner.</p>
+  <script src="admin.js" defer></script>
+</body>
 
-      <div style="margin-top:18px;">
-        <button id="signout" class="btn">Sign out</button>
-      </div>
-
-      <hr style="margin:20px 0" />
-    <script>
-      // Simple client-side gating. Not bulletproof — for dev/local use only.
-      const CONFIG = '/admin-config.json';
-      const tokenKey = 'admin-auth-token';
-
-      async function getConfig() {
-        try {
-          const r = await fetch(CONFIG + '?t=' + Date.now());
-          return await r.json();
-        } catch (e) {
-          return { password: 'change-me' };
-        }
-      }
-
-      function showAdmin() {
-        document.getElementById('locked').classList.add('admin-hidden');
-        document.getElementById('admin').classList.remove('admin-hidden');
-        renderDebug();
-      }
-
-      function hideAdmin() {
-        document.getElementById('locked').classList.remove('admin-hidden');
-        document.getElementById('admin').classList.add('admin-hidden');
-      }
-
-      function renderDebug() {
-        const out = {
-          cookies: document.cookie,
-          localStorage: { ...localStorage },
-        };
-        document.getElementById('debug').innerText = JSON.stringify(out, null, 2);
-      }
-
-      async function init() {
-        const cfg = await getConfig();
-        const saved = localStorage.getItem(tokenKey);
-        if (saved === cfg.password) { showAdmin(); return; }
-
-        // unlock handler
-        document.getElementById('admin-unlock').addEventListener('click', async () => {
-          const val = document.getElementById('admin-pass').value;
-          if (!val) return alert('Enter password');
-          if (val === cfg.password) {
-            localStorage.setItem(tokenKey, val);
-            showAdmin();
-          } else {
-            alert('Wrong password');
-          }
-        });
-
-        document.getElementById('signout').addEventListener('click', () => {
-          localStorage.removeItem(tokenKey);
-          hideAdmin();
-        });
-      }
-
-      init();
-    </script>
-  </body>
 </html>

@@ -373,7 +373,7 @@ body::-webkit-scrollbar {
   max-width: 1100px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   border-radius: 12px;
-  background: transparent;
+  background: var(--bg-soft);
 }
 
 .main .text {
@@ -409,19 +409,20 @@ body::-webkit-scrollbar {
   color: var(--white);
   /* White is cleaner than yellow for modern UI */
   height: auto;
-  min-height: 160px;
-  padding: 24px;
+  min-height: 120px;
+  padding: 16px;
   border-radius: 28px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  position: relative;
   border: none;
   box-shadow: var(--shadow-lg);
 }
 
 /* Greeting Text Logic */
 .card .greeting-text .text {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 500;
   line-height: 1.4;
   opacity: 0.95;
@@ -456,6 +457,192 @@ body::-webkit-scrollbar {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.greeting-text {
+  max-width: calc(100% - 130px);
+}
+
+.greeting-actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.notification-icon,
+.info-icon {
+  position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ff5c83;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.notification-badge.active {
+  opacity: 1;
+}
+
+.notification-icon:hover,
+.info-icon:hover {
+  transform: translateY(-1px);
+}
+
+.info-icon {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(31, 33, 152, 0.08);
+  text-align: left;
+}
+
+.notifications-list {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+}
+
+.notifications-modal-body {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  max-height: calc(100vh - 240px);
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+}
+
+.notifications-modal-card {
+  max-width: 520px;
+  padding: 28px 24px;
+}
+
+.notifications-modal-header,
+.notifications-modal-footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  text-align: left;
+}
+
+.notifications-modal-header {
+  margin-bottom: 18px;
+}
+
+.notifications-modal-footer {
+  margin-top: 18px;
+  align-items: flex-end;
+}
+
+@media screen and (max-width: 640px) {
+  .modal-card {
+    padding: 20px 16px;
+  }
+
+  .notifications-modal-body {
+    max-height: calc(100vh - 220px);
+    gap: 14px;
+  }
+
+  .notification-entry {
+    padding: 14px 16px;
+  }
+
+  .notification-entry h3 {
+    font-size: 0.98rem;
+  }
+
+  .notification-entry p {
+    font-size: 0.92rem;
+  }
+
+  .notification-entry .notification-meta {
+    font-size: 0.78rem;
+  }
+}
+
+.notification-entry {
+  width: 100%;
+  background: rgba(243, 248, 255, 0.12);
+  border: 1px solid rgba(31, 33, 152, 0.12);
+  border-radius: 22px;
+  padding: 18px 20px;
+  text-align: left;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.notification-entry:hover {
+  transform: translateY(-1px);
+  border-color: rgba(56, 123, 255, 0.24);
+}
+
+.notification-entry h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.notification-entry p {
+  margin: 0;
+  font-size: 0.94rem;
+  color: #52648d;
+  line-height: 1.6;
+}
+
+.notification-entry .notification-meta {
+  margin-top: 14px;
+  font-size: 0.8rem;
+  color: #8b97b9;
+}
+
+body.dark-mode .notification-entry {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .notification-entry p,
+body.dark-mode .notification-entry .notification-meta {
+  color: #c3d0ff;
+}
+
+@media screen and (max-width: 640px) {
+  .modal-card {
+    padding: 22px 16px;
+  }
+
+  .notification-entry {
+    padding: 14px 16px;
+  }
+
+  .notification-entry h3 {
+    font-size: 0.98rem;
+  }
+
+  .notification-entry p {
+    font-size: 0.9rem;
+  }
+}
+
+body.dark-mode .notification-entry p,
+body.dark-mode .notification-entry .notification-meta {
+  color: #b0bfdc;
 }
 
 /* --- Navigation Refinement --- */
@@ -991,6 +1178,165 @@ body.dark-mode .feedback-btn {
   color: #94a3b8;
 }
 
+.settings-modal-card {
+  padding: 28px 26px;
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+}
+
+.settings-modal-header {
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(31, 33, 152, 0.12);
+  margin-bottom: 22px;
+  text-align: center;
+}
+
+.settings-subtitle {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: #68769f;
+  line-height: 1.6;
+}
+
+.settings-modal-body {
+  display: grid;
+  gap: 14px;
+}
+
+.academic-modal-body {
+  display: grid;
+  gap: 16px;
+  text-align: left;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(243, 248, 255, 0.95);
+  border: 1px solid rgba(31, 33, 152, 0.08);
+  color: #1f2937;
+}
+
+.detail-row span {
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.detail-row strong {
+  font-weight: 700;
+}
+
+.settings-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px 22px;
+  border-radius: 24px;
+  background: rgba(243, 248, 255, 0.95);
+  border: 1px solid rgba(31, 33, 152, 0.08);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.settings-item:hover {
+  transform: translateY(-1px);
+}
+
+.settings-item.selected {
+  background: rgba(56, 123, 255, 0.14);
+  border-color: rgba(56, 123, 255, 0.4);
+}
+
+.settings-item-info {
+  flex: 1;
+}
+
+.setting-toggle {
+  width: 64px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(31, 33, 152, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.settings-item.selected .setting-toggle {
+  background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+  border-color: rgba(58, 123, 213, 0.5);
+}
+
+.toggle-pill {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.settings-item.selected .toggle-pill {
+  transform: translateX(30px);
+  background: #ffffff;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+body.dark-mode .settings-item {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.settings-item-info span {
+  font-size: 1.05rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.settings-item-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6f7c99;
+  max-width: 290px;
+}
+
+body.dark-mode .settings-item-info p {
+  color: #b0bfdc;
+}
+
+.settings-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 28px;
+}
+
+.settings-close-btn {
+  background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+  color: white;
+  border-radius: 16px;
+  border: none;
+  padding: 12px 28px;
+  font-weight: 700;
+  box-shadow: 0 16px 30px rgba(56, 123, 255, 0.17);
+  width: 100%
+}
+
+.settings-close-btn:hover {
+  transform: translateY(-1px);
+}
+
 .dev-email {
   font-size: 0.8rem;
   color: #999;
@@ -1061,8 +1407,8 @@ body.dark-mode .feedback-btn {
 
 /* Manual Toggle Button (Placed in .controls) */
 .mode-toggle {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   background: var(--white);
   border-radius: 50%;
   display: flex;
@@ -1071,15 +1417,13 @@ body.dark-mode .feedback-btn {
   cursor: pointer;
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--primary);
   border: 1px solid rgba(175, 179, 255, 0.2);
 }
 
 .mode-toggle:hover {
   transform: scale(1.1) rotate(15deg);
-  background: var(--primary);
-  color: rgb(255, 242, 0);
 }
 
 /* Dark Mode Variables Overlay */
@@ -1251,14 +1595,19 @@ body.dark-mode::-webkit-scrollbar-thumb {
   }
 
   /* Perfect Toggle Placement */
-  .mode-toggle {
+  .greeting-actions {
     position: absolute;
     top: 30px;
-    /* Aligned with internal padding */
     right: 30px;
-    /* Anchored to the far right */
-    margin: 0;
+    display: flex;
+    gap: 14px;
     z-index: 10;
+  }
+
+  .mode-toggle {
+    position: relative;
+    margin: 0;
+    z-index: 1;
     transition: var(--transition);
   }
 
@@ -1266,14 +1615,52 @@ body.dark-mode::-webkit-scrollbar-thumb {
     transform: scale(1.1) rotate(15deg);
   }
 
+  .card.greeting {
+    align-items: center;
+  }
+
+  .card.greeting>.row {
+    flex: 1 1 0;
+    min-width: 0;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .greeting-text {
     text-align: left;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 520px;
+    margin: 0;
+    position: relative;
+    top: 0;
+    align-self: center;
+  }
+
+  .card.greeting .greeting-text .text {
+    white-space: normal;
+  }
+
+  .greeting-actions {
+    position: absolute;
+    top: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+  }
+
+  .greeting-actions .mode-toggle {
+    width: 36px;
+    height: 36px;
   }
 
   #greeting-time-row {
+    flex: 0 0 auto;
     margin-left: auto;
-    /* Pushes time display to the right */
-    text-align: right;
+    justify-content: flex-end;
+    width: auto;
+    align-items: center;
   }
 
   /* 3. Navigation Bar: Full Width */
@@ -1345,6 +1732,9 @@ body.dark-mode::-webkit-scrollbar-thumb {
 }
 
 @media screen and (min-width: 768px) {
+  #greeting-time {
+    margin-right: 50px;
+  }
 
   /* 1. Make the Form Wrapper Wider and Balanced */
   .details .wrapper {

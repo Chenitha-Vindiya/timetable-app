@@ -4,8 +4,12 @@
 
 // Add to DOM constants
 const settingsToggle = document.getElementById("settings-toggle");
+const notificationsToggle = document.getElementById("notifications-toggle");
+const notificationCount = document.getElementById("notification-count");
 const settingsDarkMode = document.getElementById("settings-dark-mode");
 const settingsNotifications = document.getElementById("settings-notifications");
+const settingsThemeItem = document.getElementById("settings-theme-item");
+const settingsNotificationsItem = document.getElementById("settings-notifications-item");
 
 // Use querySelectorAll to get BOTH meta tags you added
 const themeMetas = document.querySelectorAll('meta[name="theme-color"]');
@@ -28,7 +32,19 @@ window.addEventListener("load", () => {
   if (notificationEnabled) {
     askNotificationPermission();
   }
+
+  updateSettingsUI();
+  updateNotificationBadge();
 });
+
+function updateSettingsUI() {
+  if (settingsDarkMode && settingsThemeItem) {
+    settingsThemeItem.classList.toggle("selected", settingsDarkMode.checked);
+  }
+  if (settingsNotifications && settingsNotificationsItem) {
+    settingsNotificationsItem.classList.toggle("selected", settingsNotifications.checked);
+  }
+}
 
 function openSettingsModal() {
   const modal = document.getElementById("settingsModal");
@@ -42,6 +58,79 @@ function closeSettingsModal() {
   if (!modal) return;
   modal.style.display = "none";
   document.body.style.overflow = "auto";
+}
+
+function openNotificationsModal() {
+  const modal = document.getElementById("notificationsModal");
+  if (!modal) return;
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+  renderNotificationHistory();
+  markNotificationsRead();
+}
+
+function closeNotificationsModal() {
+  const modal = document.getElementById("notificationsModal");
+  if (!modal) return;
+  modal.style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+function getNotificationHistory() {
+  const raw = localStorage.getItem("timetable-notification-history");
+  return raw ? JSON.parse(raw) : [];
+}
+
+function saveNotificationHistory(history) {
+  localStorage.setItem("timetable-notification-history", JSON.stringify(history.slice(0, 50)));
+}
+
+function updateNotificationBadge() {
+  if (!notificationCount) return;
+  const unread = getNotificationHistory().filter((item) => item.unread).length;
+  if (unread > 0) {
+    notificationCount.textContent = unread > 9 ? "9+" : unread;
+    notificationCount.classList.add("active");
+  } else {
+    notificationCount.textContent = "";
+    notificationCount.classList.remove("active");
+  }
+}
+
+function renderNotificationHistory() {
+  const list = document.getElementById("notifications-list");
+  if (!list) return;
+  const history = getNotificationHistory();
+  if (!history.length) {
+    list.innerHTML = '<div class="notification-entry"><p>No notifications yet.</p></div>';
+    return;
+  }
+
+  list.innerHTML = history.map((item) => {
+    const date = new Date(item.createdAt).toLocaleString([], {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    const title = item.title || "Announcement";
+    const body = item.body || item.message || "No message provided.";
+    return `
+        <div class="notification-entry">
+          <h3>${title}</h3>
+          <p>${body}</p>
+          <div class="notification-meta">${date}</div>
+        </div>
+      `;
+  }).join("");
+}
+
+function markNotificationsRead() {
+  const history = getNotificationHistory();
+  const updated = history.map((item) => ({ ...item, unread: false }));
+  saveNotificationHistory(updated);
+  updateNotificationBadge();
 }
 
 function applyDarkMode(enabled) {
@@ -70,13 +159,64 @@ if (settingsToggle) {
 if (settingsDarkMode) {
   settingsDarkMode.addEventListener("change", function () {
     applyDarkMode(this.checked);
+    updateSettingsUI();
   });
 }
 
 if (settingsNotifications) {
   settingsNotifications.addEventListener("change", function () {
     updateNotificationSetting(this.checked);
+    updateSettingsUI();
   });
+}
+
+if (settingsThemeItem) {
+  settingsThemeItem.addEventListener("click", function () {
+    if (!settingsDarkMode) return;
+    const checked = !settingsDarkMode.checked;
+    settingsDarkMode.checked = checked;
+    applyDarkMode(checked);
+    updateSettingsUI();
+  });
+}
+
+if (settingsNotificationsItem) {
+  settingsNotificationsItem.addEventListener("click", function () {
+    if (!settingsNotifications) return;
+    const checked = !settingsNotifications.checked;
+    settingsNotifications.checked = checked;
+    updateNotificationSetting(checked);
+    updateSettingsUI();
+  });
+}
+
+if (notificationsToggle) {
+  notificationsToggle.addEventListener("click", openNotificationsModal);
+}
+
+const infoToggle = document.getElementById("info-toggle");
+
+function openInfoModal() {
+  const modal = document.getElementById("infoModal");
+  if (!modal) return;
+  document.getElementById("detail-faculty").innerText = faculty || "-";
+  document.getElementById("detail-year").innerText = year || "-";
+  document.getElementById("detail-semester").innerText = semester || "-";
+  document.getElementById("detail-spec").innerText = spec || "-";
+  document.getElementById("detail-group").innerText = sub || "-";
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closeInfoModal() {
+  const modal = document.getElementById("infoModal");
+  if (!modal) return;
+  modal.style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+if (infoToggle) {
+  infoToggle.addEventListener("click", openInfoModal);
 }
 
 var thisVersion = "1.2.4"; // this must be updated only on a major change (not patches and bug fixes)
@@ -330,7 +470,7 @@ select_3.addEventListener("change", function () {
 
   if (mainG !== "0" && subG !== "0") {
     // Combine them to match JSON format "07.01"
-    sub = `${mainG}.${subG}`;
+    sub = `${mainG}.${subG} `;
   }
 });
 

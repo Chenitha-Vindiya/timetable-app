@@ -170,8 +170,17 @@
             <p class="text">Hi <span id="greeting-username"></span>,</p>
             <p class="text"><span id="greeting-wish"></span>!</p>
           </div>
-          <div id="settings-toggle" class="mode-toggle">
-            <i class="fa-solid fa-gear"></i>
+          <div class="greeting-actions">
+            <div id="settings-toggle" class="mode-toggle settings-icon">
+              <i class="fa-solid fa-gear"></i>
+            </div>
+            <div id="notifications-toggle" class="mode-toggle notification-icon">
+              <i class="fa-solid fa-bell"></i>
+              <span id="notification-count" class="notification-badge"></span>
+            </div>
+            <div id="info-toggle" class="mode-toggle info-icon">
+              <i class="fa-solid fa-circle-info"></i>
+            </div>
           </div>
         </div>
         <div class="row" id="greeting-time-row">
@@ -222,31 +231,79 @@
   </section>
   <!-- Settings Modal -->
   <div id="settingsModal" class="modal-overlay" style="display:none;">
-    <div class="modal-card animate-pop">
-      <div class="modal-header">
-        <h2>Settings</h2>
-      </div>
-      <div class="modal-body">
-        <div class="settings-row">
-          <span>Dark Mode</span>
-          <label class="switch">
-            <input type="checkbox" id="settings-dark-mode">
-            <span class="slider round"></span>
-          </label>
-        </div>
-        <div class="settings-row">
-          <span>Notifications</span>
-          <label class="switch">
-            <input type="checkbox" id="settings-notifications">
-            <span class="slider round"></span>
-          </label>
+    <div class="modal-card animate-pop settings-modal-card">
+      <div class="modal-header settings-modal-header">
+        <div>
+          <h2>Settings</h2>
+          <p class="settings-subtitle">Manage app appearance and notification preferences.</p>
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="feedback-btn" onclick="closeSettingsModal()">Close</button>
+      <div class="modal-body settings-modal-body">
+        <div class="settings-item" data-setting="theme" id="settings-theme-item">
+          <div class="settings-item-info">
+            <span>Dark Mode</span>
+            <p>Toggle between the app’s light and dark themes.</p>
+          </div>
+          <div class="setting-toggle">
+            <div class="toggle-pill"></div>
+          </div>
+          <input type="checkbox" id="settings-dark-mode" hidden>
+        </div>
+        <div class="settings-item" data-setting="notifications" id="settings-notifications-item">
+          <div class="settings-item-info">
+            <span>Notifications</span>
+            <p>Enable notification alerts and request permission when needed.</p>
+          </div>
+          <div class="setting-toggle">
+            <div class="toggle-pill"></div>
+          </div>
+          <input type="checkbox" id="settings-notifications" hidden>
+        </div>
+      </div>
+      <div class="modal-footer settings-modal-footer">
+        <button class="btn settings-close-btn" onclick="closeSettingsModal()">Done</button>
       </div>
     </div>
   </div>
+
+  <div id="notificationsModal" class="modal-overlay" style="display:none;">
+    <div class="modal-card animate-pop notifications-modal-card">
+      <div class="modal-header notifications-modal-header">
+        <div>
+          <h2>Notifications</h2>
+          <p class="modal-subtitle">Review the notifications you have received in the app.</p>
+        </div>
+      </div>
+      <div class="modal-body notifications-modal-body">
+        <div id="notifications-list" class="notifications-list"></div>
+      </div>
+      <div class="modal-footer notifications-modal-footer">
+        <button class="btn settings-close-btn" onclick="closeNotificationsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="infoModal" class="modal-overlay" style="display:none;">
+    <div class="modal-card animate-pop settings-modal-card">
+      <div class="modal-header settings-modal-header">
+        <div>
+          <h2>Academic Details</h2>
+          <p class="settings-subtitle">Your current faculty and timetable profile information.</p>
+        </div>
+      </div>
+      <div class="modal-body settings-modal-body academic-modal-body">
+        <div class="detail-row"><span>Faculty</span><strong id="detail-faculty">-</strong></div>
+        <div class="detail-row"><span>Year</span><strong id="detail-year">-</strong></div>
+        <div class="detail-row"><span>Semester</span><strong id="detail-semester">-</strong></div>
+        <div class="detail-row"><span>Specialization</span><strong id="detail-spec">-</strong></div>
+        <div class="detail-row"><span>Group</span><strong id="detail-group">-</strong></div>
+      </div>
+      <div class="modal-footer settings-modal-footer">
+        <button class="btn settings-close-btn" onclick="closeInfoModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- About Modal (moved out of .controls for proper fixed positioning) -->
   <div id="aboutModal" class="modal-overlay">
     <div class="modal-card animate-pop">
@@ -348,9 +405,11 @@
 
     //Sends the 'First Time' Welcome Notification.
     function welcomeNotification() {
+      const message = 'Welcome! Notifications are now active.';
+      storeNotification('SLIIT Timetable', message);
       navigator.serviceWorker.ready.then(registration => {
         registration.showNotification('SLIIT Timetable', {
-          body: 'Welcome! Notifications are now active.',
+          body: message,
           icon: './images/android-chrome-512x512.png',
           badge: './images/favicon.ico',
           vibrate: [200, 100, 200],
@@ -361,9 +420,11 @@
 
     //Sends the 'Returning User' Test Notification
     function loginAleart() {
+      const message = 'Disclaimer: This schedule is provided as-is. We assume no responsibility for its accuracy.';
+      storeNotification('SLIIT Timetable', message);
       navigator.serviceWorker.ready.then(registration => {
         registration.showNotification('SLIIT Timetable', {
-          body: 'Disclaimer: This schedule is provided as-is. We assume no responsibility for its accuracy.',
+          body: message,
           icon: './images/android-chrome-512x512.png',
           badge: './images/favicon.ico',
           vibrate: [200, 100, 200],
@@ -371,6 +432,21 @@
           tag: 'daily-disclaimer'
         });
       });
+    }
+
+    function storeNotification(title, body) {
+      const raw = localStorage.getItem('timetable-notification-history');
+      const history = raw ? JSON.parse(raw) : [];
+      history.unshift({
+        title,
+        body,
+        createdAt: new Date().toISOString(),
+        unread: true
+      });
+      localStorage.setItem('timetable-notification-history', JSON.stringify(history.slice(0, 50)));
+      if (window.updateNotificationBadge) {
+        window.updateNotificationBadge();
+      }
     }
   </script>
   <style>
