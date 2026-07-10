@@ -1,8 +1,8 @@
 {
   "name": "SLIIT Timetable",
   "short_name": "Timetable",
-  "id": "./home.html",
-  "start_url": "./home.html",
+  "id": "./index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "dir": "ltr",
   "icons": [
