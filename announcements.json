@@ -1,16 +1,3 @@
 {
-  "announcements": [
-    {
-      "id": "0b4dfdf4-5384-4bef-9e88-be0ee6fd4956",
-      "title": "🔴 Notice 🔴",
-      "body": "You can change your specialization by requesting it. Don't panic, guys. \nThis grouping sheet was made based on the specialization you chose when registering for university.",
-      "message": "You can change your specialization by requesting it. Don't panic, guys. \nThis grouping sheet was made based on the specialization you chose when registering for university.",
-      "faculty": "all",
-      "year": "all",
-      "semester": "all",
-      "spec": "all",
-      "group": "all",
-      "createdAt": "2026-07-10T22:55:30.120Z"
-    }
-  ]
+  "announcements": []
 }
