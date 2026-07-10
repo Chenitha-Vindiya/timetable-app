@@ -1,18 +1,6 @@
 {
   "announcements": [
     {
-      "id": "70436eb7-40d5-41fb-b4a9-1ea0f824ff29",
-      "title": "just testing . . .",
-      "body": "sample",
-      "message": "sample",
-      "faculty": "FOC",
-      "year": "Y2",
-      "semester": "S1 - New",
-      "spec": "Common",
-      "group": "01.01",
-      "createdAt": "2026-07-10T22:29:32.734Z"
-    },
-    {
       "id": "33a1b299-2ec9-496f-9ca2-87a516d422b6",
       "title": "Second test . . .",
       "body": "hellooooooo",
