@@ -1,3 +1,16 @@
 {
-  "announcements": []
+  "announcements": [
+    {
+      "id": "37a1322d-9c7f-4bab-87d4-166961385910",
+      "title": "test announcment",
+      "body": "sample content",
+      "message": "sample content",
+      "faculty": "all",
+      "year": "all",
+      "semester": "all",
+      "spec": "all",
+      "group": "all",
+      "createdAt": "2026-07-10T22:23:00.990Z"
+    }
+  ]
 }
