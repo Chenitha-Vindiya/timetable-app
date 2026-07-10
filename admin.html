@@ -40,6 +40,33 @@
         </section>
 
         <section class="dashboard-card hidden" id="admin-dashboard">
+          <div class="github-config-card" id="github-config-card">
+            <h3 class="card-title">GitHub Connection</h3>
+            <p class="admin-subtitle" style="margin-top:-6px;">
+              Needed to publish announcements to the shared <code>announcements.json</code> file.
+              The token is kept only in this browser tab's session storage — it is never saved to the repo.
+            </p>
+            <div class="form-group">
+              <label for="github-owner-input">Repo Owner</label>
+              <input id="github-owner-input" type="text" placeholder="e.g. Chenitha-Vindiya" />
+            </div>
+            <div class="form-group">
+              <label for="github-repo-input">Repo Name</label>
+              <input id="github-repo-input" type="text" placeholder="e.g. timetable-app" />
+            </div>
+            <div class="form-group">
+              <label for="github-branch-input">Branch (the one GitHub Pages deploys from)</label>
+              <input id="github-branch-input" type="text" placeholder="e.g. main" />
+            </div>
+            <div class="form-group">
+              <label for="github-token-input">GitHub Personal Access Token</label>
+              <input id="github-token-input" type="password" placeholder="fine-grained token with Contents: Read & write" autocomplete="off" />
+            </div>
+            <div class="form-actions">
+              <button class="btn-secondary" type="button" id="github-save-config-btn">Save connection for this session</button>
+            </div>
+            <p class="alert-text" id="github-config-status"></p>
+          </div>
           <div class="form-actions dashboard-toolbar">
             <button class="btn-primary" type="button" id="create-announcement-btn">
               Create Announcement

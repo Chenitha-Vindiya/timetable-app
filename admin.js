@@ -24,9 +24,129 @@ const publishAnnouncementBtn = document.getElementById('publish-announcement-btn
 const announcementError = document.getElementById('announcement-error');
 const announcementList = document.getElementById('announcement-list');
 const announcementItems = document.querySelector('.announcement-items');
+const githubOwnerInput = document.getElementById('github-owner-input');
+const githubRepoInput = document.getElementById('github-repo-input');
+const githubBranchInput = document.getElementById('github-branch-input');
+const githubTokenInput = document.getElementById('github-token-input');
+const githubSaveConfigBtn = document.getElementById('github-save-config-btn');
+const githubConfigStatus = document.getElementById('github-config-status');
 
 let adminConfig = null;
 let academicData = null;
+
+// ---- GitHub-backed announcements storage ----
+// The token/owner/repo/branch are kept ONLY in sessionStorage (cleared when the tab closes)
+// so they are never written into the repo itself.
+const GITHUB_API = 'https://api.github.com';
+const ANNOUNCEMENTS_PATH = 'announcements.json';
+
+function loadGithubConfig() {
+    try {
+        const raw = sessionStorage.getItem('gh-admin-config');
+        return raw ? JSON.parse(raw) : null;
+    } catch {
+        return null;
+    }
+}
+
+function populateGithubConfigInputs() {
+    const config = loadGithubConfig();
+    if (!config) return;
+    if (githubOwnerInput) githubOwnerInput.value = config.owner || '';
+    if (githubRepoInput) githubRepoInput.value = config.repo || '';
+    if (githubBranchInput) githubBranchInput.value = config.branch || '';
+    // Token intentionally left blank in the field even if saved, so it isn't shown on screen reload.
+}
+
+function saveGithubConfigFromInputs() {
+    const owner = githubOwnerInput?.value.trim();
+    const repo = githubRepoInput?.value.trim();
+    const branch = githubBranchInput?.value.trim();
+    const token = githubTokenInput?.value.trim();
+
+    if (!owner || !repo || !branch || !token) {
+        if (githubConfigStatus) githubConfigStatus.textContent = 'Please fill in owner, repo, branch, and token.';
+        return;
+    }
+
+    sessionStorage.setItem('gh-admin-config', JSON.stringify({ owner, repo, branch, token }));
+    if (githubConfigStatus) {
+        githubConfigStatus.textContent = 'Connection saved for this browser session.';
+        githubConfigStatus.style.color = '#4ade80';
+    }
+    githubTokenInput.value = '';
+}
+
+function utf8ToBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+}
+
+function base64ToUtf8(b64) {
+    return decodeURIComponent(escape(atob(b64.replace(/\n/g, ''))));
+}
+
+async function fetchAnnouncementsFile() {
+    const config = loadGithubConfig();
+    if (!config) throw new Error('GitHub connection not set up yet. Fill in the GitHub Connection section above.');
+
+    const url = `${GITHUB_API}/repos/${config.owner}/${config.repo}/contents/${ANNOUNCEMENTS_PATH}?ref=${encodeURIComponent(config.branch)}`;
+    const response = await fetch(url, {
+        headers: {
+            Accept: 'application/vnd.github+json',
+            Authorization: `Bearer ${config.token}`,
+        },
+        cache: 'no-store',
+    });
+
+    if (response.status === 404) {
+        // File doesn't exist yet on this branch - treat as empty.
+        return { data: { announcements: [] }, sha: null };
+    }
+    if (!response.ok) {
+        const detail = await response.text().catch(() => '');
+        throw new Error(`Could not read announcements.json (${response.status}). ${detail}`);
+    }
+
+    const json = await response.json();
+    const decoded = base64ToUtf8(json.content);
+    let data;
+    try {
+        data = JSON.parse(decoded);
+    } catch {
+        data = { announcements: [] };
+    }
+    if (!Array.isArray(data.announcements)) data.announcements = [];
+    return { data, sha: json.sha };
+}
+
+async function writeAnnouncementsFile(data, sha, commitMessage) {
+    const config = loadGithubConfig();
+    if (!config) throw new Error('GitHub connection not set up yet.');
+
+    const url = `${GITHUB_API}/repos/${config.owner}/${config.repo}/contents/${ANNOUNCEMENTS_PATH}`;
+    const body = {
+        message: commitMessage,
+        content: utf8ToBase64(JSON.stringify(data, null, 2)),
+        branch: config.branch,
+    };
+    if (sha) body.sha = sha;
+
+    const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/vnd.github+json',
+            Authorization: `Bearer ${config.token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+        const detail = await response.text().catch(() => '');
+        throw new Error(`Could not publish to GitHub (${response.status}). ${detail}`);
+    }
+    return response.json();
+}
 
 async function loadAdminConfig() {
     try {
@@ -173,6 +293,10 @@ function showDashboard() {
     adminHeadline.textContent = 'Welcome to the Admin Dashboard';
     adminSubtitle.textContent = 'Manage announcements, review settings, and clear dashboard state below.';
     renderConfigSummary();
+    populateGithubConfigInputs();
+    if (loadGithubConfig()) {
+        renderAdminAnnouncements();
+    }
 }
 
 function hideDashboard() {
@@ -237,36 +361,34 @@ async function createAnnouncement() {
     await openAnnouncementModal();
 }
 
-function getNotificationHistory() {
-    const raw = localStorage.getItem('timetable-notification-history');
-    return raw ? JSON.parse(raw) : [];
-}
-
-function saveNotificationHistory(history) {
-    localStorage.setItem('timetable-notification-history', JSON.stringify(history.slice(0, 100)));
-}
-
-function getLocalAdminAnnouncements() {
-    return getNotificationHistory();
-}
-
-function renderAdminAnnouncements() {
+async function renderAdminAnnouncements() {
     if (!announcementItems) return;
-    const announcements = getLocalAdminAnnouncements();
+
+    let announcements;
+    try {
+        const { data } = await fetchAnnouncementsFile();
+        announcements = data.announcements || [];
+    } catch (error) {
+        announcementItems.innerHTML = `<p>${error.message}</p>`;
+        announcementList.classList.remove('hidden');
+        return;
+    }
+
     announcementItems.innerHTML = '';
 
     if (!announcements.length) {
         announcementItems.innerHTML = '<p>No announcements have been sent yet.</p>';
-        announcementList.classList.add('hidden');
+        announcementList.classList.remove('hidden');
         return;
     }
 
-    announcements.forEach((announcement) => {
+    // Newest first
+    announcements.slice().reverse().forEach((announcement) => {
         const item = document.createElement('article');
         item.className = 'announcement-item';
         item.innerHTML = `
             <h4>${announcement.title || 'Announcement'}</h4>
-            <p>${announcement.message}</p>
+            <p>${announcement.body || announcement.message || ''}</p>
             <div class="announcement-meta">
               <span>Faculty: ${announcement.faculty || 'All'}</span>
               <span>Year: ${announcement.year || 'All'}</span>
@@ -288,7 +410,7 @@ function renderAdminAnnouncements() {
     });
 }
 
-function publishAnnouncement() {
+async function publishAnnouncement() {
     const title = announcementTitle.value.trim();
     const message = announcementText.value.trim();
     const faculty = announcementFaculty.value || 'all';
@@ -301,7 +423,6 @@ function publishAnnouncement() {
         announcementError.textContent = 'Please enter an announcement title.';
         return;
     }
-
     if (!message) {
         announcementError.textContent = 'Please enter an announcement message.';
         return;
@@ -318,22 +439,43 @@ function publishAnnouncement() {
         spec,
         group,
         createdAt: new Date().toISOString(),
-        unread: true,
     };
 
-    const history = getLocalAdminAnnouncements();
-    history.unshift(announcement);
-    saveNotificationHistory(history);
-    closeAnnouncementModal();
-    renderAdminAnnouncements();
+    publishAnnouncementBtn.disabled = true;
+    publishAnnouncementBtn.textContent = 'Publishing...';
+    announcementError.textContent = '';
+
+    try {
+        const { data, sha } = await fetchAnnouncementsFile();
+        data.announcements.push(announcement);
+        await writeAnnouncementsFile(data, sha, `Add announcement: ${title}`);
+        closeAnnouncementModal();
+        await renderAdminAnnouncements();
+    } catch (error) {
+        announcementError.textContent = error.message;
+    } finally {
+        publishAnnouncementBtn.disabled = false;
+        publishAnnouncementBtn.textContent = 'Send Announcement';
+    }
 }
 
-function deleteAnnouncement(id) {
-    const history = getLocalAdminAnnouncements();
-    const updated = history.filter((notification) => notification.id !== id);
-    saveNotificationHistory(updated);
-    renderAdminAnnouncements();
+async function deleteAnnouncement(id) {
+    try {
+        const { data, sha } = await fetchAnnouncementsFile();
+        data.announcements = data.announcements.filter((a) => a.id !== id);
+        await writeAnnouncementsFile(data, sha, `Remove announcement ${id}`);
+        await renderAdminAnnouncements();
+    } catch (error) {
+        alert(error.message);
+    }
 }
+
+githubSaveConfigBtn?.addEventListener('click', () => {
+    saveGithubConfigFromInputs();
+    if (loadGithubConfig()) {
+        renderAdminAnnouncements();
+    }
+});
 
 loginForm?.addEventListener('submit', authenticate);
 logoutButton?.addEventListener('click', logoutAdmin);
@@ -350,5 +492,4 @@ window.addEventListener('DOMContentLoaded', async () => {
     await loadAdminConfig();
     await loadAcademicOptions();
     hideDashboard();
-    renderAdminAnnouncements();
 });

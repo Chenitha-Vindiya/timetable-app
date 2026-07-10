@@ -194,6 +194,94 @@ if (notificationsToggle) {
   notificationsToggle.addEventListener("click", openNotificationsModal);
 }
 
+// ---- Admin announcements polling ----
+// Since this is a static site with no server, "push" is simulated by polling a
+// shared announcements.json file (published by the admin panel via GitHub) while
+// the app is open. This will NOT wake up a fully closed browser tab.
+const ANNOUNCEMENTS_URL = "./announcements.json";
+const ANNOUNCEMENTS_POLL_INTERVAL = 45000; // 45 seconds
+
+function getSeenAnnouncementIds() {
+  const raw = localStorage.getItem("seen-announcement-ids");
+  return raw ? JSON.parse(raw) : [];
+}
+
+function markAnnouncementSeen(id) {
+  const seen = getSeenAnnouncementIds();
+  seen.push(id);
+  localStorage.setItem("seen-announcement-ids", JSON.stringify(seen.slice(-200)));
+}
+
+function announcementMatchesUser(announcement) {
+  const userFaculty = getCookie("faculty");
+  const userYear = getCookie("year");
+  const userSemester = getCookie("semester");
+  const userSpec = getCookie("spec");
+  const userGroup = getCookie("sub");
+
+  const matches = (targetValue, userValue) =>
+    !targetValue || targetValue === "all" || targetValue === userValue;
+
+  return (
+    matches(announcement.faculty, userFaculty) &&
+    matches(announcement.year, userYear) &&
+    matches(announcement.semester, userSemester) &&
+    matches(announcement.spec, userSpec) &&
+    matches(announcement.group, userGroup)
+  );
+}
+
+function checkForAnnouncements() {
+  const notificationsEnabled = localStorage.getItem("notifications-enabled") === "true";
+  if (!notificationsEnabled) return;
+  if (!("Notification" in window) || Notification.permission !== "granted") return;
+
+  fetch(ANNOUNCEMENTS_URL, { cache: "no-store" })
+    .then((response) => (response.ok ? response.json() : null))
+    .then((data) => {
+      if (!data || !Array.isArray(data.announcements)) return;
+      const seen = getSeenAnnouncementIds();
+
+      data.announcements.forEach((announcement) => {
+        if (seen.includes(announcement.id)) return;
+
+        if (!announcementMatchesUser(announcement)) {
+          // Doesn't apply to this user - remember it so we don't re-check it every poll.
+          markAnnouncementSeen(announcement.id);
+          return;
+        }
+
+        const title = announcement.title || "Announcement";
+        const body = announcement.body || announcement.message || "";
+
+        if (typeof storeNotification === "function") {
+          storeNotification(title, body);
+        }
+
+        if (navigator.serviceWorker) {
+          navigator.serviceWorker.ready.then((registration) => {
+            registration.showNotification(title, {
+              body,
+              icon: "./images/android-chrome-512x512.png",
+              badge: "./images/favicon.ico",
+              vibrate: [200, 100, 200],
+              tag: `announcement-${announcement.id}`,
+            });
+          });
+        }
+
+        markAnnouncementSeen(announcement.id);
+      });
+    })
+    .catch((err) => console.error("Failed to check announcements:", err));
+}
+
+window.addEventListener("load", () => {
+  // Delay slightly so the service worker + permission flow (in index.html) resolves first.
+  setTimeout(checkForAnnouncements, 3000);
+  setInterval(checkForAnnouncements, ANNOUNCEMENTS_POLL_INTERVAL);
+});
+
 const infoToggle = document.getElementById("info-toggle");
 
 function openInfoModal() {
