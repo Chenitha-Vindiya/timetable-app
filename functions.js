@@ -47,13 +47,13 @@ function readDetails() {
   options[1] = document.getElementById("select-year").value;
   options[2] = document.getElementById("select-1").value;
   options[3] = document.getElementById("select-2").value;
-  
+
   /** * CRITICAL FIX: 
    * Do not use document.getElementById("select-3").value directly.
    * Use the 'sub' variable which was already combined (e.g., "07.01") 
    * inside the select_3 change listener in main.js.
    */
-  options[4] = sub; 
+  options[4] = sub;
 
   // Generate a random seed for the profile picture (DiceBear API)
   randomSeed = Math.floor(Math.random() * 100000) + 1;
@@ -66,13 +66,13 @@ function readDetails() {
   } else {
     // 1. Save all details to cookies for persistence on refresh
     setDetails(options);
-    
+
     // 2. Prepare the UI data (Greeting, PFP, etc.)
     displayUserData();
-    
+
     // 3. Render the timetable
     displayTable();
-    
+
     // 4. Move to the main dashboard
     transition("details-section", "main-section");
   }
@@ -116,7 +116,7 @@ function displayUserData() {
 /** Optimized displayTable for better readability */
 function displayTable() {
   if (!keys || !keys.fac || !faculty || !year || !semester || !spec || !sub) {
-    return; 
+    return;
   }
 
   try {
@@ -127,9 +127,13 @@ function displayTable() {
     var now = new Date();
     var nowDate = now.toISOString().split("T")[0];
 
+    // Add these two lines to get the real current day (e.g., "friday")
+    const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+    var realToday = daysOfWeek[now.getDay()];
+
     if (num > 0) {
       document.getElementById("date-display").innerHTML = `${dayToday}`;
-      
+
       for (let i = 0; i < num; i++) {
         let cardColorClass = "";
         let linkTag = "";
@@ -149,7 +153,8 @@ function displayTable() {
         var targetStart = new Date(nowDate + "T" + startTime + ":00");
         var targetEnd = new Date(nowDate + "T" + endTime + ":00");
 
-        if (targetStart <= now && targetEnd > now) {
+        // Now it checks if the table being viewed is actually today's table
+        if (dayToday.toLowerCase() === realToday && targetStart <= now && targetEnd > now) {
           cardColorClass = "ongoing";
         }
 
@@ -317,32 +322,24 @@ function closeAlert() {
 }
 
 function toggleAboutModal() {
-    const modal = document.getElementById("aboutModal");
-    
-    // Check the actual computed style from the browser
-    const currentDisplay = window.getComputedStyle(modal).display;
+  const modal = document.getElementById("aboutModal");
 
-    if (currentDisplay === "none") {
-        modal.style.display = "flex";
-        document.body.style.overflow = "hidden"; // Stops background scrolling
-    } else {
-        modal.style.display = "none";
-        document.body.style.overflow = "auto"; // Brings scrolling back
-    }
-}
+  // Check the actual computed style from the browser
+  const currentDisplay = window.getComputedStyle(modal).display;
 
-// Close modal if user clicks outside the box
-window.onclick = function(event) {
-  const modal = document.getElementById('aboutModal');
-  if (event.target == modal) {
+  if (currentDisplay === "none") {
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden"; // Stops background scrolling
+  } else {
     modal.style.display = "none";
+    document.body.style.overflow = "auto"; // Brings scrolling back
   }
 }
 
-// Replace the two separate window click listeners with this single one
-window.addEventListener('click', function(event) {
+// Close modal when user clicks outside the box (restores body scroll)
+window.addEventListener('click', function (event) {
   const modal = document.getElementById('aboutModal');
   if (event.target === modal) {
-    toggleAboutModal(); // Uses your existing logic to reset body overflow
+    toggleAboutModal(); // Uses existing logic to toggle display and body overflow
   }
 });

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin — Timetable</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      /* small admin-only helpers */
+      .admin-card { max-width:900px; margin:40px auto; padding:28px; border-radius:18px; background:var(--white); }
+      .admin-hidden { display:none; }
+      .admin-locked { max-width:420px; margin:80px auto; padding:28px; border-radius:18px; background:var(--white); text-align:center; }
+      .input-row { display:flex; gap:8px; align-items:center; justify-content:center; }
+      .admin-actions { display:flex; gap:12px; justify-content:center; margin-top:18px; }
+    </style>
+  </head>
+  <body>
+    <section class="admin-locked" id="locked">
+      <h2>Admin Access</h2>
+      <p>Enter the admin password to continue.</p>
+      <div class="input-row">
+        <input id="admin-pass" type="password" placeholder="Password" style="padding:10px 12px;border-radius:10px;border:1px solid #e6e9ff;" />
+        <button id="admin-unlock" class="btn">Unlock</button>
+      </div>
+      <p style="font-size:.85rem;color:#666;margin-top:12px;">Tip: Change the password in <strong>admin-config.json</strong> after setup.</p>
+    </section>
+
+    <section id="admin" class="admin-card admin-hidden">
+      <h1>Admin Dashboard</h1>
+      <p class="text">This is a private admin area. Only open if you are the site owner.</p>
+
+      <div style="margin-top:18px;">
+        <button id="signout" class="btn">Sign out</button>
+      </div>
+
+      <hr style="margin:20px 0" />
+
+      <h3>Quick actions</h3>
+      <ul>
+        <li>View local storage keys</li>
+        <li>Export user details (placeholder)</li>
+      </ul>
+
+      <pre id="debug" style="background:#f5f7ff;padding:12px;border-radius:8px;overflow:auto;max-height:300px;"></pre>
+    </section>
+
+    <script>
+      // Simple client-side gating. Not bulletproof — for dev/local use only.
+      const CONFIG = '/admin-config.json';
+      const tokenKey = 'admin-auth-token';
+
+      async function getConfig() {
+        try {
+          const r = await fetch(CONFIG + '?t=' + Date.now());
+          return await r.json();
+        } catch (e) {
+          return { password: 'change-me' };
+        }
+      }
+
+      function showAdmin() {
+        document.getElementById('locked').classList.add('admin-hidden');
+        document.getElementById('admin').classList.remove('admin-hidden');
+        renderDebug();
+      }
+
+      function hideAdmin() {
+        document.getElementById('locked').classList.remove('admin-hidden');
+        document.getElementById('admin').classList.add('admin-hidden');
+      }
+
+      function renderDebug() {
+        const out = {
+          cookies: document.cookie,
+          localStorage: { ...localStorage },
+        };
+        document.getElementById('debug').innerText = JSON.stringify(out, null, 2);
+      }
+
+      async function init() {
+        const cfg = await getConfig();
+        const saved = localStorage.getItem(tokenKey);
+        if (saved === cfg.password) { showAdmin(); return; }
+
+        // unlock handler
+        document.getElementById('admin-unlock').addEventListener('click', async () => {
+          const val = document.getElementById('admin-pass').value;
+          if (!val) return alert('Enter password');
+          if (val === cfg.password) {
+            localStorage.setItem(tokenKey, val);
+            showAdmin();
+          } else {
+            alert('Wrong password');
+          }
+        });
+
+        document.getElementById('signout').addEventListener('click', () => {
+          localStorage.removeItem(tokenKey);
+          hideAdmin();
+        });
+      }
+
+      init();
+    </script>
+  </body>
+</html>

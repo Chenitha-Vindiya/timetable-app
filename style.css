@@ -122,10 +122,7 @@ body::-webkit-scrollbar {
 .login .login-logo {
   width: 100px;
   align-self: center;
-  margin-bottom: 10px;
-}
-
-.login .subheading {
+  padding: 10px 10px;
   font-size: 0.9rem;
   padding: 4px 12px;
   background-color: #afb3ff30;
@@ -160,10 +157,11 @@ body::-webkit-scrollbar {
   font-weight: 600;
   box-shadow: 0 8px 20px rgba(100, 149, 237, 0.3);
   width: 100%;
+  margin: 5px auto 10px auto;
 }
 
 .btn.continue-btn:hover {
-  transform: translateY(-2px);
+  transform: translateX(3px);
   box-shadow: 0 12px 25px rgba(100, 149, 237, 0.4);
 }
 
@@ -208,16 +206,27 @@ body::-webkit-scrollbar {
   text-align: center;
 }
 
+/* --- Responsive: Desktop adjustments for details wrapper --- */
+@media (min-width: 900px) {
+
+  /* keep some space from top/bottom and reduce wrapper max height */
+  .details .wrapper {
+    /* Ensure wrapper is centered horizontally and has vertical spacing */
+    margin: 10px auto;
+    /* Leave 160px total for top+bottom (adjust as needed) */
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+  }
+}
+
 .details h2 {
   font-size: 1.6rem;
-  margin-bottom: 8px;
   font-weight: 700;
 }
 
 .details p {
   font-size: 0.95rem;
   color: #6e70cf;
-  /* margin-bottom: 25px; */
 }
 
 .details .group {
@@ -288,13 +297,14 @@ body::-webkit-scrollbar {
   border-radius: 50px;
   border: 1.5px solid rgba(175, 179, 255, 0.3);
   display: inline-flex;
-  align-items: center;
+  justify-content: center;
   gap: 8px;
   cursor: pointer;
   transition: var(--transition);
   text-decoration: none;
   box-shadow: var(--shadow-sm);
 }
+
 
 .text.back-btn:hover {
   background: var(--bg-soft);
@@ -349,11 +359,21 @@ body::-webkit-scrollbar {
 }
 
 .main .controls {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 18px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
+  padding: 8px 20px;
+  z-index: 9999;
+  width: min(1100px, 95%);
+  max-width: 1100px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  background: transparent;
 }
 
 .main .text {
@@ -839,12 +859,14 @@ body::-webkit-scrollbar {
 .modal-overlay {
   display: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   /* In light mode, uses a lighter semi-transparent black */
-  background: rgba(0, 0, 0, 0.4); 
+  background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);
-  z-index: 9999;
+  z-index: 10000;
   justify-content: center;
   align-items: center;
   padding: 20px;
@@ -858,14 +880,14 @@ body.dark-mode .modal-overlay {
 /* The Modal Card */
 .modal-card {
   /* Automatically switches: #f8f9ff in Light, #16172d in Dark */
-  background: var(--white); 
+  background: var(--white);
   width: 100%;
-  max-width: 380px;
+  max-width: 480px;
   border-radius: 28px;
   padding: 30px 20px;
   text-align: center;
   /* Automatically switches: #1e1e1e in Light, #f1f1ff in Dark */
-  color: var(--primary); 
+  color: var(--primary);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transition: var(--transition);
 }
@@ -876,57 +898,85 @@ body.dark-mode .modal-card {
 
 /* Logo Styling - Fixed colors work in both modes */
 .logo-circle {
-  width: 70px; 
+  width: 70px;
   height: 70px;
-  border: 3px solid #3b82f6; /* Your blue border */
+  border: 3px solid #3b82f6;
+  /* Your blue border */
   border-radius: 50%;
   margin: 0 auto 15px;
-  display: flex; 
-  justify-content: center; 
+  display: flex;
+  justify-content: center;
   align-items: center;
-  overflow: hidden; /* Ensures image doesn't bleed out of the circle */
-  background: white; /* Optional: adds a background if your logo is transparent */
+  overflow: hidden;
+  /* Ensures image doesn't bleed out of the circle */
+  background: white;
+  /* Optional: adds a background if your logo is transparent */
 }
 
 .modal-logo-img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* This keeps the aspect ratio perfect */
+  object-fit: cover;
+  /* This keeps the aspect ratio perfect */
   display: block;
 }
 
-.yellow-play { color: #eab308; font-size: 1.2rem; }
-.blue-icon { position: absolute; font-size: 2.5rem; opacity: 0.2; color: #3b82f6; }
+.yellow-play {
+  color: #eab308;
+  font-size: 1.2rem;
+}
 
-.app-name { font-family: 'Patua One', cursive; font-size: 1.8rem; margin-bottom: 5px; }
-.version-text { color: #888; font-size: 0.9rem; }
+.blue-icon {
+  position: absolute;
+  font-size: 2.5rem;
+  opacity: 0.2;
+  color: #3b82f6;
+}
 
-.modal-divider { 
-  border: 0; 
-  border-top: 1px solid rgba(0, 0, 0, 0.1); 
-  margin: 20px 0; 
+.app-name {
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+}
+
+.version-text {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.modal-divider {
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
 }
 
 body.dark-mode .modal-divider {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.release-date { color: #f59e0b; font-weight: 600; font-size: 0.9rem; margin-bottom: 15px; }
+.release-date {
+  color: #f59e0b;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
 
-.app-summary { 
-  color: #555; /* Dark grey for light mode */
-  line-height: 1.6; 
-  font-size: 0.95rem; 
+.app-summary {
+  color: #555;
+  /* Dark grey for light mode */
+  line-height: 1.6;
+  font-size: 0.95rem;
 }
 
 body.dark-mode .app-summary {
-  color: #ccc; /* Light grey for dark mode */
+  color: #ccc;
+  /* Light grey for dark mode */
 }
 
 /* Buttons */
 .feedback-btn {
   display: inline-block;
-  background: #f1f5f9; /* Light grey-blue for light mode */
+  background: #f1f5f9;
+  /* Light grey-blue for light mode */
   color: #475569;
   padding: 12px 25px;
   border-radius: 14px;
@@ -941,22 +991,40 @@ body.dark-mode .feedback-btn {
   color: #94a3b8;
 }
 
-.dev-email { font-size: 0.8rem; color: #999; margin-top: 10px; }
+.dev-email {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 10px;
+}
 
 .close-text-btn {
-  background: none; border: none; 
-  color: var(--accent); /* Uses your #4b52ff / #30ccff accent */
-  font-size: 1rem; font-weight: 600; margin-top: 25px; cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--accent);
+  /* Uses your #4b52ff / #30ccff accent */
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 25px;
+  cursor: pointer;
 }
 
 /* Pop Animation */
 .animate-pop {
   animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
 @keyframes modalPop {
-  from { transform: scale(0.7); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
+
 /* notice section */
 .notice {
   display: flex;
@@ -1226,8 +1294,8 @@ body.dark-mode::-webkit-scrollbar-thumb {
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 25px;
-    padding: 50px;
+    /* row-gap then column-gap: gives vertical and horizontal spacing */
+    gap: 18px 30px;
     text-align: left;
   }
 
@@ -1239,11 +1307,6 @@ body.dark-mode::-webkit-scrollbar-thumb {
   .details .back-btn {
     grid-column: span 2;
     text-align: center;
-  }
-
-  .details .btn.continue-btn {
-    width: 320px;
-    margin: 30px auto 0 auto;
   }
 }
 
@@ -1289,8 +1352,7 @@ body.dark-mode::-webkit-scrollbar-thumb {
     display: grid;
     grid-template-columns: 1fr 1fr;
     /* Two equal columns */
-    gap: 25px;
-    padding: 50px;
+    gap: 18px 30px;
     text-align: left;
     /* Align text left for a professional desktop feel */
   }
@@ -1324,7 +1386,8 @@ body.dark-mode::-webkit-scrollbar-thumb {
 
 /* --- About Modal Dark Mode Refinement --- */
 body.dark-mode .modal-card {
-  background-color: var(--white); /* Uses the dark surface color #16172d */
+  background-color: var(--white);
+  /* Uses the dark surface color #16172d */
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: var(--shadow-lg);
 }
@@ -1334,11 +1397,13 @@ body.dark-mode .modal-divider {
 }
 
 body.dark-mode .app-summary {
-  color: var(--primary-light); /* Softer lavender white for readability */
+  color: var(--primary-light);
+  /* Softer lavender white for readability */
 }
 
 body.dark-mode .feedback-btn {
-  background: #1f213a; /* Deep blue-grey for buttons */
+  background: #1f213a;
+  /* Deep blue-grey for buttons */
   color: var(--primary-light);
 }
 
@@ -1348,9 +1413,11 @@ body.dark-mode .feedback-btn:hover {
 }
 
 body.dark-mode .dev-email {
-  color: #6e70cf; /* Muted purple */
+  color: #6e70cf;
+  /* Muted purple */
 }
 
 body.dark-mode .close-text-btn {
-  color: var(--accent); /* Light blue for the close link */
+  color: var(--accent);
+  /* Light blue for the close link */
 }
