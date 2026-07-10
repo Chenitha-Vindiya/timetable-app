@@ -231,15 +231,59 @@ function announcementMatchesUser(announcement) {
   );
 }
 
-function checkForAnnouncements() {
-  const notificationsEnabled = localStorage.getItem("notifications-enabled") === "true";
-  if (!notificationsEnabled) return;
-  if (!("Notification" in window) || Notification.permission !== "granted") return;
+// Stores an admin announcement into this device's local notification history,
+// tagged with its source announcement id so it can later be removed if the
+// admin deletes it from announcements.json.
+function storeAdminAnnouncementNotification(announcement) {
+  const history = getNotificationHistory();
+  history.unshift({
+    announcementId: announcement.id,
+    source: "admin-announcement",
+    title: announcement.title || "Announcement",
+    body: announcement.body || announcement.message || "",
+    createdAt: announcement.createdAt || new Date().toISOString(),
+    unread: true,
+  });
+  saveNotificationHistory(history);
+  updateNotificationBadge();
+}
 
+// Removes any locally-stored admin announcements that no longer exist in the
+// live announcements.json (i.e. the admin deleted them), so a user's device
+// stays in sync even after they've already received/stored a notification.
+function reconcileDeletedAnnouncements(remoteAnnouncements) {
+  const remoteIds = new Set(remoteAnnouncements.map((a) => a.id));
+  const history = getNotificationHistory();
+  const filtered = history.filter((item) => {
+    if (item.source !== "admin-announcement") return true; // not admin-sourced, leave it alone
+    return remoteIds.has(item.announcementId);
+  });
+
+  if (filtered.length !== history.length) {
+    saveNotificationHistory(filtered);
+    updateNotificationBadge();
+    // If the notifications modal happens to be open, refresh what's shown.
+    const modal = document.getElementById("notificationsModal");
+    if (modal && modal.style.display !== "none") {
+      renderNotificationHistory();
+    }
+  }
+}
+
+function checkForAnnouncements() {
   fetch(ANNOUNCEMENTS_URL, { cache: "no-store" })
     .then((response) => (response.ok ? response.json() : null))
     .then((data) => {
       if (!data || !Array.isArray(data.announcements)) return;
+
+      // Always reconcile deletions, regardless of whether notifications are enabled -
+      // this is just cleaning up what's already stored locally.
+      reconcileDeletedAnnouncements(data.announcements);
+
+      const notificationsEnabled = localStorage.getItem("notifications-enabled") === "true";
+      if (!notificationsEnabled) return;
+      if (!("Notification" in window) || Notification.permission !== "granted") return;
+
       const seen = getSeenAnnouncementIds();
 
       data.announcements.forEach((announcement) => {
@@ -254,9 +298,7 @@ function checkForAnnouncements() {
         const title = announcement.title || "Announcement";
         const body = announcement.body || announcement.message || "";
 
-        if (typeof storeNotification === "function") {
-          storeNotification(title, body);
-        }
+        storeAdminAnnouncementNotification(announcement);
 
         if (navigator.serviceWorker) {
           navigator.serviceWorker.ready.then((registration) => {
